@@ -1,0 +1,65 @@
+{
+    "room": {
+        "id": "1",   
+        "title": "seyia ikki shiryu hioga shun",         
+        "description": "seyia ikki shiryu hioga shun",
+        "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both",
+        "created_dt": "2020-02-11",
+        "url": "http://google.com",
+        "length": 8,
+        "width": 6,
+        "customer": {
+            "id": "1",   
+            "public_name": "This is a customer",
+            "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg",
+            "location": "Belo Horizonte"
+        },
+        "category": {
+            "name": "Quintal"
+        },
+        "location": "Belo Horizonte",
+        "medias": [
+            { "id": 1, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" },
+            { "id": 2, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" },
+            { "id": 3, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" },
+            { "id": 4, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" }
+        ],
+        "comments": [
+            {
+                "id": 1,
+                "user": {
+                    "public_name": "José",
+                    "category": "customer",
+                    "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both"
+                },
+                "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+                "medias": [
+                    { "id": 1, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" },
+                    { "id": 2, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" }
+                ]
+            },
+            {
+                "id": 2,
+                "user": {
+                    "public_name": "Cleiton",
+                    "category": "professional",
+                    "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both"
+                },
+                "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+            },
+            {
+                "id": 3,
+                "user": {
+                    "public_name": "Cleiton",
+                    "category": "professional",
+                    "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both"
+                },
+                "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+                "medias": [
+                    { "id": 1, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" },
+                    { "id": 2, "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg", "type": "image" }
+                ]
+            }
+        ]
+    }    
+}

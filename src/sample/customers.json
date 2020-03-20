@@ -1,0 +1,32 @@
+{
+    "customers": {
+        "consulted": [
+            {
+                "id": "1",   
+                "public_name": "This is a customer",
+                "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg",
+                "location": "Belo Horizonte",
+                "email": "joseph@joseph.com",
+                "phone": "31 999831070"
+            },
+            {
+                "id": "2",   
+                "public_name": "This is a customer",
+                "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg",
+                "location": "Belo Horizonte",
+                "email": "joseph@joseph.com",
+                "phone": "31 999831070"
+            }
+        ],
+        "interested": [
+            {
+                "id": "3",   
+                "public_name": "This is a customer",
+                "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg",
+                "location": "Belo Horizonte",
+                "email": "joseph@joseph.com",
+                "phone": "31 999831070"
+            }
+        ]            
+    }            
+}

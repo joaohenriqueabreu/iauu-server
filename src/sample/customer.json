@@ -1,0 +1,89 @@
+{
+    "customer": {        
+        "has_private_access": true,
+        "id": "1",   
+        "public_name": "This is a customer",
+        "photo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Elizabeth_Hurley08.jpg/200px-Elizabeth_Hurley08.jpg",
+        "location": "Belo Horizonte",
+        "private": {
+            "name": "Fulano de tal",
+            "email": "zacarias@trapalhoes.com.br",
+            "phone": "31988743863"
+        },
+        "rating": {
+            "rate": 3.5,
+            "amount": 22        
+        },
+        "has_consulted_with_professional": true,
+        "consultings": [
+            {
+                "id": "1", 
+                "date": "2020-02-01 11:34:00",
+                "room": {
+                    "id": 1,
+                    "description":"ichigo rukkia renji biyakuya",
+                    "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both",
+                    "customer": {
+                        "name": "Joseph Klimberg"
+                    },
+                    "category": {
+                        "name": "Bedroom"
+                    },
+                    "location": "Belo Horizonte"
+                },
+                "num_comments": 20
+            },
+            {
+                "id": "15", 
+                "date": "2020-02-01 11:34:00",
+                "room": {
+                    "id": 2,
+                    "description":"ichigo rukkia renji biyakuya",
+                    "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both",
+                    "customer": {
+                        "name": "Joseph McBeth"
+                    },
+                    "category": {
+                        "name": "Bathroom"
+                    },
+                    "location": "São Paulo"
+                },
+                "num_comments": 17
+            },
+            {
+                "id": "18", 
+                "date": "2020-02-01 11:34:00",
+                "room": {
+                    "id": 3,
+                    "description":"ichigo rukkia renji biyakuya",
+                    "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both",
+                    "customer": {
+                        "name": "Joseph Armstrong"
+                    },
+                    "category": {
+                        "name": "Kitchen"
+                    },
+                    "location": "Rio de Janeiro"
+                },
+                "num_comments": 0
+            },
+            {
+                "id": "19", 
+                "date": "2020-02-01 11:34:00",
+                "room": {
+                    "id": 4,
+                    "description":"ichigo rukkia renji biyakuya",
+                    "photo": "https://img.ibxk.com.br/2019/07/26/26000559344397.jpg?w=1120&h=420&mode=crop&scale=both",
+                    "customer": {
+                        "name": "Joseph Abdula"
+                    },
+                    "category": {
+                        "name": "Bathroom"
+                    },
+                    "location": "Viçosa"
+                },
+                "num_comments": 2
+            }
+        ]
+    }
+}
