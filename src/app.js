@@ -2,23 +2,24 @@
  We have required all the packages we need for our application, defined the database, created an express server and an express router.
 Now, let's define CORS middleware, to ensure we do not run into any cross origin resource errors:
  */
-"use strict";
-const express = require('express');
-const DB = require('./db');
-const config = require('./config');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
-const fs = require('fs');
+// "use strict";
+
+const express        = require('express');
+const bcrypt        = require('bcrypt');
+const jwt           = require('jsonwebtoken');
+const bodyParser    = require('body-parser');
+
+const DB            = require('./db');
+const config        = require('./config');
 
 const Professional  = require('./models/professional');
 const Customer      = require('./models/customer');
 const Room          = require('./models/room');
 const Consulting    = require('./models/consulting');
 
-const db = new DB("sqlitedb")
-const app = express();
-const router = express.Router();
+const db            = new DB("sqlitedb")
+const app           = express();
+const router        = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());

@@ -1,5 +1,5 @@
 const faker      = require('faker');
-const Consulting = require('./consulting');
+const Consulting = require('./Consulting');
 
 class Customer {
     constructor(loadConsultings) {

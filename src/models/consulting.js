@@ -1,8 +1,8 @@
 const faker         = require('faker');
-const Professional  = require('./professional');
-const Room          = require('./room');
+const Professional  = require('./Professional');
+const Room          = require('./Room');
 
-class Consulting {
+module.exports = class Consulting {
     constructor() {
         this.id             = faker.random.number(10000);
         this.created_at     = faker.date.recent();
@@ -11,5 +11,3 @@ class Consulting {
         this.professional   = new Professional();        
     }
 }
-
-module.exports = Consulting;

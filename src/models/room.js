@@ -1,7 +1,8 @@
-const faker     = require('faker');
-const Customer  = require('./Customer');
+const Customer = require('./Customer');
+const Comment  = require('./Comment');
+const faker    = require('faker');
 
-class Room {
+module.exports = class Room {
     constructor() {
         this.id             = faker.random.number(10000);
         this.title          = faker.lorem.sentence();
@@ -13,8 +14,11 @@ class Room {
         };
         this.num_comments   = faker.random.number(10);
         this.location       = `${faker.address.city()}, ${faker.address.stateAbbr()}, ${faker.address.country()}`;
-        this.customer       = new Customer();        
+        this.customer       = new Customer();  
+        this.comments       = [];
+        
+        for (let i = 0; i < this.num_comments; i++) {
+            this.comments.push(new Comment());
+        }
     }
 }
-
-module.exports = Room;
