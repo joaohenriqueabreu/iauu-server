@@ -6,13 +6,17 @@ class Customer {
         this.id                 = faker.random.number(10000);
         this.has_private_access = faker.random.boolean();
         this.has_consulted_with_professional = faker.random.boolean();
-        this.public_name        = faker.name.findName();
-        this.location       = `${faker.address.city()}, ${faker.address.stateAbbr()}, ${faker.address.country()}`;
+        this.name               = faker.name.findName();
+        this.location           = `${faker.address.city()}, ${faker.address.stateAbbr()}, ${faker.address.country()}`;
+        this.photo              = faker.image.avatar();
+
         if (this.has_private_access) {
             this.private = {
                 name: faker.name.findName(),
                 email: faker.internet.email(),
-                phone: faker.phone.phoneNumber()
+                phone: faker.phone.phoneNumber(),
+                // TODO change!!!!
+                zapphone: 5531999831070
             };
         }
         

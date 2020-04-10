@@ -1,6 +1,6 @@
 const faker = require('faker');
 
-module.exports = class Professional {
+class Professional {
     constructor(loadDetails) {
         this.id             = faker.random.number(10000);
         this.name           = faker.name.findName();
@@ -27,3 +27,5 @@ module.exports = class Professional {
         }
     }
 }
+
+module.exports = Professional;

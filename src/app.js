@@ -4,7 +4,7 @@ Now, let's define CORS middleware, to ensure we do not run into any cross origin
  */
 // "use strict";
 
-const express        = require('express');
+const express       = require('express');
 const bcrypt        = require('bcrypt');
 const jwt           = require('jsonwebtoken');
 const bodyParser    = require('body-parser');
@@ -16,10 +16,21 @@ const Professional  = require('./models/professional');
 const Customer      = require('./models/customer');
 const Room          = require('./models/room');
 const Consulting    = require('./models/consulting');
+const Comment       = require('./models/comment');
 
 const db            = new DB("sqlitedb")
 const app           = express();
 const router        = express.Router();
+
+const simpleReply   = function (req, res) { 
+    if (req.body) { console.log(req.body); }
+    res.status(200).send({message: "wooow"});
+}
+
+const delayedReply = function (req, res, payload) {
+    if (req.body) { console.log(req.body); }
+    setTimeout(() => res.status(200).send(payload), 2000);   
+}
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -36,7 +47,20 @@ const allowCrossDomain = function(req, res, next) {
     next();
 }
 
-app.use(allowCrossDomain)
+app.use(allowCrossDomain);
+
+/**
+For login, we use bcrypt to compare our hashed password with the user supplied password. If they are the same, we log the user in. If not, well, feel free to respond to the user how you please.
+Now, let's use the express server to make our application accessible:
+ */
+app.use(router)
+
+process.title = 'reforma.ai.server';
+let port = process.env.PORT || 3002;
+
+let server = app.listen(port, function() {
+    console.log('Express server listening on port ' + port)
+});
 
 app.get('/', function(req, res) {
     res.status(200).send({ message: "Service up and running" });
@@ -44,6 +68,15 @@ app.get('/', function(req, res) {
 
 app.get('server', function(req, res) {
     res.status(200).send({ message: "Route working fine" });
+});
+
+app.get('/api/rooms/:id', function(req, res) {    
+    let room = new Room(); 
+    for(let i=0;i < Math.ceil(Math.random()*10);i++) {
+        room.consultings.push(new Consulting(false))
+    }
+
+    res.status(200).send(room);
 });
 
 app.get('/api/rooms', function(req, res) {
@@ -56,19 +89,30 @@ app.get('/api/rooms', function(req, res) {
     res.status(200).send(rooms);    
 });
 
-app.get('/api/rooms/:id', function(req, res) {
-    setTimeout(() => res.status(200).send(new Room()), 3000);    
+app.post('/api/rooms', function(req, res) {
+    console.log(req.body);
+    if (req.body.room !== undefined) {
+        setTimeout(() => res.status(200).send({message: 'yey'}), 3000); 
+    }
+})
+
+app.get('/api/consultings/:id', function(req, res) {
+    setTimeout(() => res.status(200).send(new Consulting(true)), 3000);    
 });
 
 app.get('/api/customers/:id', function(req, res) {
     setTimeout(() => res.status(200).send(new Customer(true)), 2000);    
 });
 
+app.post('/api/customers/professionals/:id/authorize', simpleReply);
+app.post('/api/customers/consultings/:id/close', simpleReply);
+app.post('/api/customers/professionals/:id/block', simpleReply);
+
 app.get('/api/consultings', function(req, res) {
     const count = Math.ceil(Math.random() * 10);    
     let consultings = [];
     for(let i = 0; i < count; i++) {
-        consultings.push(new Consulting());
+        consultings.push(new Consulting(false));
     }
 
     res.status(200).send(consultings);    
@@ -109,6 +153,10 @@ app.get('/api/professionals/:id', function(req, res) {
     }
 
     res.status(500).send({error: 'nope'});
+});
+
+app.post('/api/comments', function(req, res) {
+    res.status(200).send(new Comment());
 });
 
 app.post('/register', function(req, res) {
@@ -157,15 +205,3 @@ app.post('/login', (req, res) => {
         res.status(200).send({ auth: true, token: token, user: user });
     });
 })
-
-/**
-For login, we use bcrypt to compare our hashed password with the user supplied password. If they are the same, we log the user in. If not, well, feel free to respond to the user how you please.
-Now, let's use the express server to make our application accessible:
- */
-app.use(router)
-
-let port = process.env.PORT || 3000;
-
-let server = app.listen(port, function() {
-    console.log('Express server listening on port ' + port)
-});
