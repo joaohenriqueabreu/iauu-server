@@ -12,6 +12,7 @@ const bodyParser    = require('body-parser');
 const DB            = require('./db');
 const config        = require('./config');
 
+const User          = require('./models/user');
 const Professional  = require('./models/professional');
 const Customer      = require('./models/customer');
 const Room          = require('./models/room');
@@ -25,12 +26,16 @@ const router        = express.Router();
 const simpleReply   = function (req, res) { 
     if (req.body) { console.log(req.body); }
     res.status(200).send({message: "wooow"});
-}
+};
 
 const delayedReply = function (req, res, payload) {
     if (req.body) { console.log(req.body); }
     setTimeout(() => res.status(200).send(payload), 2000);   
-}
+};
+
+const randomModels = function (ceil = 10) {
+    return Math.ceil(Math.random() * ceil); 
+};
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -70,23 +75,26 @@ app.get('server', function(req, res) {
     res.status(200).send({ message: "Route working fine" });
 });
 
-app.get('/api/rooms/:id', function(req, res) {    
-    let room = new Room(); 
-    for(let i=0;i < Math.ceil(Math.random()*10);i++) {
-        room.consultings.push(new Consulting(false))
-    }
-
-    res.status(200).send(room);
-});
-
-app.get('/api/rooms', function(req, res) {
-    const count = Math.ceil(Math.random() * 10);    
+app.get('/api/rooms', function(req, res) {      
     let rooms = [];
-    for(let i = 0; i < count; i++) {
+    for(let i = 0; i < randomModels(); i++) {
         rooms.push(new Room());
     }
 
     res.status(200).send(rooms);    
+});
+
+app.get('/api/rooms/:id', function(req, res) {    
+    let room = new Room(); 
+    room.customer = new Customer();
+    for(let i=0; i < randomModels(); i++) {
+        const consulting        = new Consulting();
+        consulting.professional = new Professional();
+        consulting.room         = {id: room.id};        
+        room.consultings.push(consulting);
+    }
+
+    res.status(200).send(room);
 });
 
 app.post('/api/rooms', function(req, res) {
@@ -94,10 +102,47 @@ app.post('/api/rooms', function(req, res) {
     if (req.body.room !== undefined) {
         setTimeout(() => res.status(200).send({message: 'yey'}), 3000); 
     }
-})
+});
+
+app.put('/api/rooms', function(req, res) {
+    console.log(req.body);
+    if (req.body.room !== undefined) {
+        setTimeout(() => res.status(200).send({message: 'yey'}), 3000); 
+    }
+});
+
+app.get('/api/consultings', function(req, res) {      
+    let consultings = [];
+    for(let i = 0; i < randomModels(); i++) {
+        const consulting        = new Consulting();
+        consulting.room         = new Room();
+        consulting.professional = new Professional();
+        consultings.push(consulting);
+    }
+
+    res.status(200).send(consultings);    
+});
 
 app.get('/api/consultings/:id', function(req, res) {
-    setTimeout(() => res.status(200).send(new Consulting(true)), 3000);    
+    const consulting        = new Consulting();
+    consulting.room         = new Room();
+    consulting.professional = new Professional();
+    for (let i = 0; i < randomModels(); i++) {
+        consulting.comments.push(new Comment());
+    }
+
+    res.status(200).send(consulting);
+});
+
+app.get('/api/rooms/:id/consultings', function (req, res) {
+    const room = new Room();    
+    for (let i = 0; i < room.num_consultings; i++) {
+        const consulting    = new Consulting();   
+        consulting.room     = {id: room.id};        
+        room.consultings.push(consulting);
+    }
+
+    res.status(200).send(room);
 });
 
 app.get('/api/customers/:id', function(req, res) {
@@ -107,25 +152,6 @@ app.get('/api/customers/:id', function(req, res) {
 app.post('/api/customers/professionals/:id/authorize', simpleReply);
 app.post('/api/customers/consultings/:id/close', simpleReply);
 app.post('/api/customers/professionals/:id/block', simpleReply);
-
-app.get('/api/consultings', function(req, res) {
-    const count = Math.ceil(Math.random() * 10);    
-    let consultings = [];
-    for(let i = 0; i < count; i++) {
-        consultings.push(new Consulting(false));
-    }
-
-    res.status(200).send(consultings);    
-});
-
-app.get('/api/customer/:id/consultings', function(req, res) {
-    if (req.params.id === '123') {
-        res.status(200).send(new Consulting());
-        return;
-    }    
-
-    res.status(500).send({error: "nope"});
-});
 
 app.get('/api/professional/:id/customers', function(req, res) {
     if (req.params.id === '123') {
@@ -194,14 +220,29 @@ app.post('/register-admin', function(req, res) {
     }); 
 });
 
-app.post('/login', (req, res) => {
-    db.selectByEmail(req.body.email, (err, user) => {
-        if (err) return res.status(500).send('Error on the server.');
-        if (!user) return res.status(404).send('No user found.');
-        let passwordIsValid = bcrypt.compareSync(req.body.password, user.user_pass);
-        if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
-        let token = jwt.sign({ id: user.id }, config.secret, { expiresIn: 86400 // expires in 24 hours
-        });
-        res.status(200).send({ auth: true, token: token, user: user });
-    });
-})
+app.post('/api/login', (req, res) => {
+    let user = new User(req.body.type);
+    console.log(req.body);
+    user.type = req.body.type;    
+    
+    return setTimeout(() => res.status(200).send(user), 3000); 
+    // db.selectByEmail(req.body.email, (err, user) => {
+    //     if (err) return res.status(500).send('Error on the server.');
+    //     if (!user) return res.status(404).send('No user found.');
+    //     let passwordIsValid = bcrypt.compareSync(req.body.password, user.user_pass);
+    //     if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+    //     let token = jwt.sign({ id: user.id }, config.secret, { expiresIn: 86400 // expires in 24 hours
+    //     });
+    //     res.status(200).send({ auth: true, token: token, user: user });
+    // });
+});
+
+const GenerateTokenService = require('.//services/auth/GenerateTokenService')
+app.post('/api/validate', (req, res) => {  
+    console.log(req.body)      ;
+    let user    = new User(req.body.type); 
+
+    // Create a new token
+    user.token = GenerateTokenService.generate();
+    res.status(200).send(user);
+});
