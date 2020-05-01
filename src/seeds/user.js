@@ -1,8 +1,9 @@
 const faker = require('faker');
+const Model = require('./model');
 
-class User {
-    constructor(type) {
-        this.id             = faker.random.number(10000);
+module.exports = class User extends Model {
+    constructor(type) {      
+        super();  
         this.type           = type;
         this.email          = faker.internet.email();
         this.public_name    = faker.name.findName();
@@ -11,12 +12,6 @@ class User {
         this.is_verified    = faker.random.boolean();        
         this.location       = `${faker.address.city()}, ${faker.address.stateAbbr()}, ${faker.address.country()}`;
         this.photo          = faker.image.avatar();
-        this.token          = faker.random.alphaNumeric(40);
-        this.rating         = {
-            rate: faker.random.number(5),
-            amount: faker.random.number(100)
-        }
+        this.token          = faker.random.alphaNumeric(128);
     }
 }
-
-module.exports = User;
