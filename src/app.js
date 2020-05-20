@@ -50,7 +50,7 @@ Now, let's use the express server to make our application accessible:
  */
 app.use(router)
 
-process.title = 'iauu.ai.server';
+process.title = 'iauu.server';
 let port = process.env.PORT || 3003;
 
 let server = app.listen(port, function() {

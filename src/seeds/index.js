@@ -9,5 +9,6 @@ const Proposal      = require('./proposal')
 const Presentation  = require('./presentation')
 const Schedule      = require('./schedule')
 const Timeslot      = require('./timeslot')
+const Payment       = require('./payment')
 
-module.exports = { Model, Location, Media, User, Artist, Contractor, Product, Proposal, Presentation, Schedule, Timeslot }
+module.exports = { Model, Location, Media, User, Artist, Contractor, Product, Proposal, Presentation, Schedule, Timeslot, Payment }

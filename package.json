@@ -8,7 +8,7 @@
     "scripts": {
         "server": "node src/app",
         "start": "node src/app",
-        "watch": "npm-watch server",
+        "watch": "nodemon server",
         "stop": "pkill --signal SIGINT reforma.ai.server"
     },
     "dependencies": {
