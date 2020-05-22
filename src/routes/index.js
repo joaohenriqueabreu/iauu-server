@@ -42,7 +42,7 @@ app.post('/api/validate', (req, res) => {
 app.post('/api/login', (req, res) => {
     console.log('Login attempt from...')
     console.log(req.body.email)
-    res.status(200).send({token: faker.random.alphaNumeric(128)})
+    res.status(200).send({asdtoken: faker.random.alphaNumeric(128)})
 })
 
 app.delete('/api/login', (req, res) => {
