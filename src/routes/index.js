@@ -18,6 +18,12 @@ app.get('/api/schedules/:id/:year', (req, res) => {
 
 app.get('/api/artists', (req, res) => {
     let artists = []
+    console.log('Requesting artists')
+    if (req.query.length > 0) {
+        const params = JSON.parse(req.query[0])
+        console.log(params.term)
+    }
+    
     for (let i = 0; i < faker.random.number(20); i++) {
         artists.push(new Artist())
     }

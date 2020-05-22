@@ -1,0 +1,21 @@
+module.exports = {
+  root: true,
+  env: {    
+    node: true
+  },
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
+  extends: [    
+    'prettier',    
+    'plugin:prettier/recommended',
+    'plugin:nuxt/recommended'
+  ],
+  plugins: [
+    'prettier'
+  ],
+  // add your custom rules here
+  rules: {
+    "vue/require-prop-types": 0,    
+  }
+}
