@@ -5,7 +5,6 @@ const app       = express()
 const { Location, Media, User, Artist, Contractor, Product, Proposal, Presentation, Schedule, Timeslot, Payment } = require('../seeds')
 
 const successMessage = { message: 'success' }
-const generateToken  = { token: faker.random.alphaNumeric(128) }
 
 app.get('/api/schedules/:id/:year', (req, res) => {        
     const schedule = new Schedule()
@@ -43,7 +42,7 @@ app.post('/api/validate', (req, res) => {
 app.post('/api/login', (req, res) => {
     console.log('Login attempt from...')
     console.log(req.body.email)
-    res.status(200).send({user: new User()})
+    res.status(200).send({token: faker.random.alphaNumeric(128)})
 })
 
 app.delete('/api/login', (req, res) => {
