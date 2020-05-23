@@ -36,13 +36,13 @@ app.get('/api/contractors/:id', (req, res) => res.status(200).send(new Contracto
 
 app.post('/api/validate', (req, res) => {
     console.log('Attempting to validate token')    
-    res.status(200).send({user: new User('artist')})
+    res.status(200).send(new User('artist'))
 })
 
 app.post('/api/login', (req, res) => {
     console.log('Login attempt from...')
-    console.log(req.body.email)
-    res.status(200).send({asdtoken: faker.random.alphaNumeric(128)})
+    console.log(req.body)
+    res.status(200).send(faker.random.alphaNumeric(128))
 })
 
 app.delete('/api/login', (req, res) => {
