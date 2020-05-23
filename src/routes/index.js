@@ -31,7 +31,15 @@ app.get('/api/artists', (req, res) => {
 })
 
 app.get('/', (req, res) => res.status(200).send({ message: "Service up and running" }))
-app.get('/api/artists/:id', (req, res) => res.status(200).send(new Artist(true)))
+app.get('/api/artists/:id', (req, res) => {
+    console.log("Requisting artist")
+    console.log(req.params.id)
+
+    // Checking if we are receiving a bearer token
+    console.log(req.headers)
+
+    res.status(200).send(new Artist(true))
+})
 app.get('/api/contractors/:id', (req, res) => res.status(200).send(new Contractor()))
 
 app.post('/api/validate', (req, res) => {
