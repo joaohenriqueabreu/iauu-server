@@ -36,16 +36,14 @@ module.exports = class Artist extends Model {
         
         this.stats      = {
             presentations: faker.random.number(4000),
-            public: faker.random.number(10000) ,
+            fans: faker.random.number(3000000) ,
             score: this.rating.rate           
         }
 
-        this.display_rate = faker.random.boolean()
-        if (this.display_rate) {
-            this.rate = faker.random.number(10000)            
-        }
+        this.display_rate = faker.random.boolean()        
 
         if (loadDetails) {
+            this.rate       = faker.random.number(10000)            
             this.email      = faker.internet.email()
             this.phone      = faker.phone.phoneNumber()
             this.medias     = [
@@ -57,6 +55,15 @@ module.exports = class Artist extends Model {
                 'https://youtu.be/yntTx5aE9Rc',
                 'https://www.instagram.com/p/B_8yFy3lsUJ/?igshid=4a8snfjko1xn',
             ]
+
+            this.testemonials = []
+            for (let i = 0; i< faker.random.number(50);i++) {
+                this.testemonials.push({
+                    photo: faker.image.avatar(),
+                    user: faker.name.findName(),
+                    content: faker.lorem.paragraph(3)
+                })
+            }
         }
     }
 }

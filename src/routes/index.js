@@ -38,7 +38,14 @@ app.get('/api/artists/:id', (req, res) => {
     // Checking if we are receiving a bearer token
     console.log(req.headers)
 
-    res.status(200).send(new Artist(true))
+    let artist = new Artist(true)
+
+    artist.products = []
+    for (let i =0; i < faker.random.number(4)+ 1; i++) {
+        artist.products.push(new Product())
+    }
+
+    res.status(200).send(artist)
 })
 app.get('/api/contractors/:id', (req, res) => res.status(200).send(new Contractor()))
 
