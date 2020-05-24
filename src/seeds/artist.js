@@ -20,7 +20,7 @@ module.exports = class Artist extends Model {
         this.zipcode        = faker.address.zipCode()
         this.photo          = faker.image.avatar()
         this.bg_photo       = faker.image.avatar()
-        this.story          = faker.lorem.paragraphs(10)
+        this.story          = faker.lorem.paragraphs(10)        
         this.rating         = {
             rate: faker.random.number(3) + 2,
             amount: faker.random.number(100)
@@ -48,7 +48,7 @@ module.exports = class Artist extends Model {
             this.phone      = faker.phone.phoneNumber()
             this.medias     = [
                 'https://open.spotify.com/track/3UpS7kBnkVQYG13pDDFTC4?si=UioD9IQZR1SiR6S8hXxX7Q',
-                'https://vimeo.com/69185882',
+                // 'https://vimeo.com/69185882',
                 'https://vm.tiktok.com/3K3wfo/',
                 'https://www.instagram.com/p/B_T31QpFQhh/?igshid=1nu761g1bcs39',
                 'https://youtu.be/g4pQi3XCg7U',

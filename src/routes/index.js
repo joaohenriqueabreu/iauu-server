@@ -50,8 +50,10 @@ app.get('/api/artists/:id', (req, res) => {
 app.get('/api/contractors/:id', (req, res) => res.status(200).send(new Contractor()))
 
 app.post('/api/validate', (req, res) => {
-    console.log('Attempting to validate token')    
-    res.status(200).send(new User('artist'))
+    console.log('Attempting to validate token')
+    console.log(req.headers)
+
+    res.status(200).send(new User('contractor'))
 })
 
 app.post('/api/login', (req, res) => {
