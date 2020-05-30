@@ -5,13 +5,13 @@ Now, let's define CORS middleware, to ensure we do not run into any cross origin
 // "use strict";
 
 const express       = require('express');
-const bcrypt        = require('bcrypt');
-const jwt           = require('jsonwebtoken');
 const bodyParser    = require('body-parser');
 
 const app           = express();
 const router        = express.Router();
 const routes        = require('./routes')
+
+require('dotenv').config()
 
 const simpleReply   = function (req, res) { 
     if (req.body) { console.log(req.body); }

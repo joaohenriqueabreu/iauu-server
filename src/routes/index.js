@@ -1,16 +1,23 @@
 const express   = require('express')
 const faker     = require('faker')
 const moment    = require('moment')
+const jwt       = require('jwt-simple')
 const app       = express()
 const { Location, Media, User, Artist, Contractor, Product, Proposal, Presentation, Schedule, Timeslot, Payment } = require('../seeds')
 
+const { GenerateTokenService } = require('../services/auth')
 const successMessage = { message: 'success' }
 
-app.get('/api/schedules/:id/:year', (req, res) => {        
-    const schedule = new Schedule()
+let sessionUserType = 'guest'
+
+app.get('/api/schedules/:id/:year', (req, res) => {
+    console.log('Requsting schedule...')                        
+    const schedule = new Schedule(sessionUserType === 'contractor')
     schedule.timeslots.sort((timeslot1, timeslot2) => {        
         return moment(timeslot1.start_dt).unix() - moment(timeslot2.start_dt).unix()
     })
+
+    console.log(`Returning ${schedule.timeslots.length} events`)
 
     res.status(200).send(schedule)
 })
@@ -51,15 +58,22 @@ app.get('/api/contractors/:id', (req, res) => res.status(200).send(new Contracto
 
 app.post('/api/validate', (req, res) => {
     console.log('Attempting to validate token')
-    console.log(req.headers)
+    const token = req.headers.authorization.replace('Bearer ', '')
 
-    res.status(200).send(new User('contractor'))
+    try {
+        const { type } = jwt.decode(token, process.env.AUTH_SECRET)
+
+        sessionUserType = type
+        res.status(200).send(new User(type))
+    } catch (error) {
+        res.status(400).send({message: 'Token expired'})
+    }    
 })
 
 app.post('/api/login', (req, res) => {
     console.log('Login attempt from...')
     console.log(req.body)
-    res.status(200).send(faker.random.alphaNumeric(128))
+    res.status(200).send(GenerateTokenService.generate(req.body))
 })
 
 app.delete('/api/login', (req, res) => {
@@ -68,7 +82,7 @@ app.delete('/api/login', (req, res) => {
 
 app.post('/api/register', (req, res) => res.status(200).send(new User()))
 
-app.get('/api/products', (req, res) => {
+app.get('/api/products/:id', (req, res) => {
     let products = []
     for (let i = 0; i < faker.random.number(4); i++) {
         products.push(new Product())
@@ -87,11 +101,7 @@ app.post('/api/products', (req, res) => {
 
 app.delete('/api/products/:id', (req,res) => res.status(200).send(successMessage))
 
-app.post('/api/schedules', (req, res) => {
-    
-    console.log("Receiving...")
-    console.log(req.body);
-       
+app.post('/api/schedules', (req, res) => {        
     let timeslot = new Timeslot()
     timeslot.type = req.body.type
     timeslot.start_dt = req.body.full_day 
