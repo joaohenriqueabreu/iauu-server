@@ -59,6 +59,7 @@ app.get('/api/contractors/:id', (req, res) => res.status(200).send(new Contracto
 app.post('/api/validate', (req, res) => {
     console.log('Attempting to validate token')
     const token = req.headers.authorization.replace('Bearer ', '')
+    console.log(req.headers)
 
     try {
         const { type } = jwt.decode(token, process.env.AUTH_SECRET)
@@ -80,7 +81,7 @@ app.delete('/api/login', (req, res) => {
     res.status(200).send({})
 })
 
-app.post('/api/register', (req, res) => res.status(200).send(new User()))
+app.post('/api/register', (req, res) => res.status(200).send(GenerateTokenService.generate(req.body)))
 
 app.get('/api/products/:id', (req, res) => {
     let products = []
