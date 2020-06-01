@@ -84,7 +84,7 @@ app.post('/api/register', (req, res) => res.status(200).send(new User()))
 
 app.get('/api/products/:id', (req, res) => {
     let products = []
-    for (let i = 0; i < faker.random.number(4); i++) {
+    for (let i = 0; i < faker.random.number(4) + 1; i++) {
         products.push(new Product())
     }
 
@@ -136,6 +136,14 @@ app.get('/api/proposals/:id', (req, res) => {
     console.log("Sending back...")
     console.log(proposal)
     res.status(200).send(proposal)
+})
+
+// contractor sending proposal
+app.post('/api/proposals', (req, res) => {
+    console.log('Inncoming proposal...')
+    console.log(req.body)
+
+    res.status(200).send(successMessage)
 })
 
 // Artist accepting a proposal, that becomes a presentation
