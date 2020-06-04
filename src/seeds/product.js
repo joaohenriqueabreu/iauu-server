@@ -13,7 +13,7 @@ module.exports = class Product extends Model {
         
         const media = new Media()
         if (faker.random.boolean()) {
-            media.url = 'https://youtu.be/yntTx5aE9Rc'
+            media.url = 'https://www.youtube.com/embed/yntTx5aE9Rc'
             media.type = 'video'
             this.main_media = media
         } else {
@@ -33,6 +33,11 @@ module.exports = class Product extends Model {
             const media = new Media()
             media.url = randomSocial[faker.random.number(randomSocial.length - 1)]
             this.medias.push(media)
+        }
+
+        this.rating = {
+            score: faker.random.number(5),
+            amount: faker.random.number(40)
         }
     }                         
 }

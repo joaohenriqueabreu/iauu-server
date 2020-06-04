@@ -21,7 +21,7 @@
                 "name": "Jeniffer Lawrence",
                 "isVerified": true,
                 "rating": {
-                    "rate": 4.8,
+                    "score": 4.8,
                     "amount": 59
                 },
                 "location": "Belo Horizonte, MG",
@@ -50,7 +50,7 @@
                 "name": "Jeniffer Lawrence",
                 "isVerified": true,
                 "rating": {
-                    "rate": 4.8,
+                    "score": 4.8,
                     "amount": 59
                 },
                 "location": "Belo Horizonte, MG",
@@ -79,7 +79,7 @@
                 "name": "Jeniffer Lawrence",
                 "isVerified": true,
                 "rating": {
-                    "rate": 4.8,
+                    "score": 4.8,
                     "amount": 59
                 },
                 "location": "Belo Horizonte, MG",
@@ -108,7 +108,7 @@
                 "name": "Jeniffer Lawrence",
                 "isVerified": true,
                 "rating": {
-                    "rate": 4.8,
+                    "score": 4.8,
                     "amount": 59
                 },
                 "location": "Belo Horizonte, MG",

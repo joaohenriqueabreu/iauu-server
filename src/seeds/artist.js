@@ -22,7 +22,7 @@ module.exports = class Artist extends Model {
         this.bg_photo       = faker.image.avatar()
         this.story          = faker.lorem.paragraphs(10)        
         this.rating         = {
-            rate: faker.random.number(3) + 2,
+            score: faker.random.number(3) + 2,
             amount: faker.random.number(100)
         }
 
@@ -37,13 +37,13 @@ module.exports = class Artist extends Model {
         this.stats      = {
             presentations: faker.random.number(4000),
             fans: faker.random.number(3000000) ,
-            score: this.rating.rate           
+            score: this.rating.score           
         }
 
         this.display_rate = faker.random.boolean()        
 
         if (loadDetails) {
-            this.rate       = faker.random.number(10000)            
+            this.score      = faker.random.number(10000)            
             this.email      = faker.internet.email()
             this.phone      = faker.phone.phoneNumber()
             this.medias     = [
