@@ -1,6 +1,6 @@
-const BaseService   = require('../BaseService');
+const BaseService   = require('../base');
 const faker         = require('faker');
-const User          = require('./models/user')
+const User          = require('../../models/user')
 
 module.exports = class UserLoginService extends BaseService
 {

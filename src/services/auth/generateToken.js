@@ -1,12 +1,9 @@
-const BaseService   = require('../BaseService');
+const BaseService   = require('../base');
 const faker         = require('faker');
 const jwt           = require('jwt-simple')
 
-module.exports = class GenerateTokenService extends BaseService
-{
-    constructor() { }
-
-    static generate({email}) {
+module.exports = {
+    generate({email}) {
         console.log(email)
         const now = Math.floor(Date.now() / 1000)
         if (!['contractor', 'artist'].includes(email)) {

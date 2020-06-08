@@ -1,3 +1,3 @@
-const GenerateTokenService = require('./GenerateTokenService')
+const GenerateTokenService = require('./generateToken')
 
 module.exports = { GenerateTokenService }
