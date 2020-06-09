@@ -4,23 +4,36 @@ const User = require('../../models/user')
 const GenerateTokenService = require('./generateToken')
 
 module.exports = class RegisterUserService extends BaseService {
-  constructor(name, email, password, generateTokenService = GenerateTokenService) {
+  constructor(name, email, password, type) {
     super()
-    this.name = name
-    this.email = email
-    this.generateTokenService = generateTokenService
+    this.user = new User({name, email, type})  
+    console.log(this.user)    
     
-    const hash = bcrypt.hashSync(password, 10);
-    this.password = hash
+    const hash = bcrypt.hashSync(password, 10);    
+    this.user.password = hash        
   }
 
-  async register() {    
-    const result = await User.exists({email: this.email})
-    console.log(result)
-    if (true) {
-      throw new Error('User already exists')
+  async register() { 
+    const exists = await User.exists({email: this.user.email})    
+    if (exists) {        
+      throw new Error('User exists')
     }
+  
+    await this.generateToken().saveData()            
+    return this    
+  }
 
-    console.log('user does not exist')
+  getToken() {
+    return this.user.token
+  }
+
+  generateToken() {
+    this.user.token = GenerateTokenService.generate(this.user)
+    return this
+  }
+
+  async saveData() {
+    await this.user.save()
+    return this
   }
 }

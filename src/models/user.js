@@ -1,15 +1,18 @@
 const db = require('../config/db');
 const BaseModel = require('./base')
+
 const { Schema } = db
 
 const userSchema = new Schema({
   email:              { type: String, unique: true, required: true },
   password:           { type: String, required: true },
-  title:              { type: String, required: true },
-  first_name:         { type: String, required: true },
-  last_name:          { type: String, required: true },
+  type:               { type: String, required: true, enum: ['artist', 'contractor', 'admin'] },
+  title:              { type: String },
+  name:               { type: String, required: true },
+  first_name:         { type: String },
+  last_name:          { type: String },
   accept_terms:       { type: Boolean },
-  role:               { type: String, required: true },
+  role:               { type: String },
   verification_token: { type: String },
   is_verified:        { type: Boolean, default: false },
   reset_token:        { type: String },
@@ -30,7 +33,7 @@ const userSchema = new Schema({
 
 class User extends BaseModel {
   constructor() {
-    super()
+    super()    
   }
 
   static findFromCredentials({email, password}) {

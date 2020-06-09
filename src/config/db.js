@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 const connectionOptions = { 
     useCreateIndex: true, 
     useNewUrlParser: true, 
-    useUnifiedTopology: true, 
-    useFindAndModify: false,
+    useUnifiedTopology: true,     
+    // useFindAndModify: false,
     // autoReconnect: true,
     // reconnectTries: 1000000,
     // reconnectInterval: 3000
@@ -32,17 +32,14 @@ mongoose.connection.on('error', (error) => {
 })
 
 const run = async () => {
-  // const username = encodeURIComponent(process.env.DB_USERNAME)
-  // const password = encodeURIComponent(process.env.DB_PASSWORD)
-  // const hostname = encodeURIComponent(process.env.DB_HOSTNAME)
-  // const dbname   = encodeURIComponent(process.env.DB_NAME)  
+  const username    = encodeURIComponent(process.env.DB_USERNAME)
+  const password    = encodeURIComponent(process.env.DB_PASSWORD)
+  const hostname    = encodeURIComponent(process.env.DB_HOSTNAME)
+  const dbname      = encodeURIComponent(process.env.DB_NAME)   
+  const authSource  = encodeURIComponent(process.env.DB_AUTH_SOURCE)   
 
-  const username = process.env.DB_USERNAME
-  const password = encodeURIComponent(process.env.DB_PASSWORD)
-  const hostname = process.env.DB_HOSTNAME
-  const dbname   = process.env.DB_NAME
-  console.log(`mongodb://${username}:${password}@${hostname}/${dbname}`)
-  await mongoose.connect(`mongodb://"${username}":"${password}"@${hostname}:27017/${dbname}`, connectionOptions)
+  console.log(`mongodb://${username}:${password}@${hostname}/${dbname}`) 
+  await mongoose.connect(`mongodb://${username}:${password}@${hostname}/${dbname}?authSource=${authSource}`, connectionOptions)
 }
 
 run().catch(error => console.error(error))

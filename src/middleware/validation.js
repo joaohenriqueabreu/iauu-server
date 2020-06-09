@@ -17,11 +17,13 @@ const validate = (req, next, schema) => {
     }
 }
 
-const newCrendentials = (req, res, next) => {        
+const newCrendentials = (req, res, next) => { 
+    console.log(req.body)       
     const schema = validateRequest.object({
       name: validateRequest.string().required(),
       email: validateRequest.string().required(),
-      password: validateRequest.string().required()
+      password: validateRequest.string().required(),
+      type: validateRequest.string().required()
     });
     
     return validate(req, next, schema);

@@ -1,9 +1,10 @@
 const { Schema } = require('../config/db')
 
 module.exports = class BaseModel {
-  constructor() {
-    this.pre('save', handleValidate)
-    this.post('save', handleSave)
+  constructor(schema) {
+    console.log(schema)
+    schema.pre('save', handleValidate)
+    schema.post('save', handleSave)
   }
 
   static async findById(id) {
@@ -16,7 +17,7 @@ module.exports = class BaseModel {
     return this.handleQuery(error, model)    
   }
 
-  handleQuery(error, model) {
+  handleQuery(error, model) {    
     if (error !== undefined) {
       throw new Error('Model not found')
     }
@@ -32,5 +33,13 @@ module.exports = class BaseModel {
   handleSave(error, model, next) {
     console.log('it tried to save')
     next()
+  }
+
+  handleError(a, b, c, d) {
+    console('opsy')
+    console.log(a)
+    console.log(b)
+    console.log(c)
+    console.log(d)
   }
 }

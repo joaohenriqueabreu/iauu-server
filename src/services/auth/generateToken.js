@@ -3,15 +3,13 @@ const faker         = require('faker');
 const jwt           = require('jwt-simple')
 
 module.exports = {
-    generate({email}) {
-        console.log(email)
-        const now = Math.floor(Date.now() / 1000)
-        if (!['contractor', 'artist'].includes(email)) {
-            throw new Error('Invalid user type')
-        }
-        
+    generate({id, name, email, type}) {        
+        const now = Math.floor(Date.now() / 1000)                
         const payload = {
-            type: email,            
+            type: type,
+            email: email,
+            name: name,
+            id: id,            
             iat: now,
             exp: now + (60 * 60 * 24)
         }
