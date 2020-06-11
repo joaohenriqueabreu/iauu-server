@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../data/db');
 const BaseModel = require('./base')
 
 const { Schema } = db
@@ -6,13 +6,14 @@ const { Schema } = db
 const userSchema = new Schema({
   email:              { type: String, unique: true, required: true },
   password:           { type: String, required: true },
-  type:               { type: String, required: true, enum: ['artist', 'contractor', 'admin'] },
-  title:              { type: String },
+  role:               { type: String, required: true, enum: ['artist', 'contractor', 'admin'] },
   name:               { type: String, required: true },
+  access_token:       { type: String, required: true },
+  title:              { type: String },  
   first_name:         { type: String },
   last_name:          { type: String },
   accept_terms:       { type: Boolean },
-  role:               { type: String },
+  role:               { type: String },  
   verification_token: { type: String },
   is_verified:        { type: Boolean, default: false },
   reset_token:        { type: String },

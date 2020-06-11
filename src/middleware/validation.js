@@ -12,6 +12,7 @@ const validate = (req, next, schema) => {
     if (error) {
         next(`Validation error: ${error.details.map(x => x.message).join(', ')}`);
     } else {
+        console.log('validation...ok')
         req.body = value;
         next();
     }
@@ -23,7 +24,7 @@ const newCrendentials = (req, res, next) => {
       name: validateRequest.string().required(),
       email: validateRequest.string().required(),
       password: validateRequest.string().required(),
-      type: validateRequest.string().required()
+      role: validateRequest.string().required()
     });
     
     return validate(req, next, schema);

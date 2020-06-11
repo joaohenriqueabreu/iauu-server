@@ -3,29 +3,32 @@
 const BaseController = require('./base')
 const RegisterUserService = require('../services/auth/registerUser')
 const AuthenticateUserService = require('../services/auth/authenticateUser')
-const errorMiddleware = require('../middleware/error')
 
 class AuthController extends BaseController {
   register(req, res, next) {    
       console.log(req.body)
-      const {name, email, password, type} = req.body
-      const registerUserSvc = new RegisterUserService(name, email, password, type)       
+      const {name, email, password, role} = req.body
+      const registerUserSvc = new RegisterUserService(name, email, password, role)       
       registerUserSvc.register()
         .then(() => { res.status(200).json(registerUserSvc.getToken()) })
-        .catch(error => { return next(error) })                                                               
+        .catch(error => next(error))                                                               
   }
 
-  login(req, res) {
+  login(req, res, next) {
     const {email, password} = req.body
-    const token = (new LoginUserService(email, password)).login()
-    res.status(200).json(token)
+    const authenticateUserService = new AuthenticateUserService(email, password)
+
+    authenticateUserService.login()
+      .then(() => { res.status(200).json(authenticateUserService.getToken())})
+      .catch(error => next(error))        
   }
 
-  validate(req, res) {    
-    const token = req.headers.authorization.replace('Bearer ', '')          
-    const { type } = jwt.decode(token, process.env.AUTH_SECRET)
-    sessionUserType = type
-    res.status(200).json(new User(type))
+  validate(req, res) {        
+    res.status(200).json(req.user)
+  }
+
+  resetPassword(req, res) {
+
   }
   
   logoff(req, res) {

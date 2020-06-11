@@ -7,11 +7,12 @@ Now, let's define CORS middleware, to ensure we do not run into any cross origin
 // Express and Request config
 const express       = require('express')
 const bodyParser    = require('body-parser')
-// const cors          = require('cors')
+const helmet        = require('helmet')
+const compression   = require('compression')
+const cors          = require('cors')
 
-// connect to db
-const db            = require('./config/db')
-
+// init db and connect
+const db            = require('./data/db')
 
 // Express config
 const app           = express();
@@ -23,30 +24,21 @@ const errorMiddleware = require('./middleware/error')
 
 require('dotenv').config()
 
+// Security middlewares
+const whitelist     = process.env.CORS_WHITELIST
+const corsOptions   = {
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: function (origin, callback) {      
+        if (whitelist.indexOf(origin) !== -1) { callback(null, true) } 
+        else { callback(new Error('Not allowed by CORS')) }
+    }
+}
+app.use(cors(corsOptions));
+app.use(helmet())
+app.use(compression())
+
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
-
-// CORS middleware
-// const allowCrossDomain = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', '*');
-//     res.header('Access-Control-Allow-Headers', '*');
-//     next();
-// }
-
-// app.use(allowCrossDomain);
-// var whitelist = ['http://localhost:3333', 'http://localhost:80']
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
-
-// app.use(cors(corsOptions));
 
 /**
 For login, we use bcrypt to compare our hashed password with the user supplied password. If they are the same, we log the user in. If not, well, feel free to respond to the user how you please.

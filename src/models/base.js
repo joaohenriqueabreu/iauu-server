@@ -1,10 +1,8 @@
-const { Schema } = require('../config/db')
+const db = require('../data/db')
 
 module.exports = class BaseModel {
   constructor(schema) {
-    console.log(schema)
-    schema.pre('save', handleValidate)
-    schema.post('save', handleSave)
+    if (this.constructor === BaseModel) { throw new TypeError('Cannot construct abstract class') }
   }
 
   static async findById(id) {
@@ -12,17 +10,20 @@ module.exports = class BaseModel {
     return this.handleQuery(error, model)
   } 
   
-  static async fetch(data) {
-    const {error, model} = await this.find(data)
-    return this.handleQuery(error, model)    
+  static async fetch(data) {    
+    return this.find(data, this.handleQuery)    
   }
 
-  handleQuery(error, model) {    
-    if (error !== undefined) {
+  static async fetchOne(data) {
+    return this.findOne(data, this.handleQuery)
+  }
+
+  static handleQuery(error, models) { 
+    if (error !== undefined && error !== null) {      
       throw new Error('Model not found')
     }
 
-    return model
+    return models
   }
 
   handleValidate(next) {
@@ -36,10 +37,18 @@ module.exports = class BaseModel {
   }
 
   handleError(a, b, c, d) {
-    console('opsy')
+    console.log('opsy')
     console.log(a)
     console.log(b)
     console.log(c)
     console.log(d)
+  }
+
+  static notFound(model) {
+    if (model === undefined || model === null || model === [] || model.length === 0) {
+      return true
+    } 
+
+    return model instanceof db.Types.ObjectId
   }
 }

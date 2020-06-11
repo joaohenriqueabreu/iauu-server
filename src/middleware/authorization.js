@@ -1,3 +1,4 @@
+require('dotenv').config()
 const jwt = require('express-jwt');
 const RetrieveUserService = require('../services/user/retrieveUser')
 
@@ -8,23 +9,25 @@ module.exports = {
     if (typeof roles === 'string') {
         roles = [roles];
     }    
+    console.log('authorizing...')
+    
     return [      
         // authenticate JWT token and attach user to request object (req.user)
-        // jwt({secret: process.env.AUTH_SECRET}),
-        jwt({secret: 'abc'}),
+        jwt({secret: process.env.AUTH_SECRET}),        
 
         // authorize based on user role
         async (req, res, next) => {
-            const user = await RetrieveUserService({id: req.user.id })
+          console.log('authorizing...ok')          
 
-            if (!account || (roles.length && !roles.includes(account.role))) {
-                // account no longer exists or role not authorized
-                return res.status(401).json({ message: 'Unauthorized' });
-            }
-
-            // authentication and authorization successful
-            req.user.role = account.role;
-            next();
+          // For now only parse jwt token
+          next()
+          // const retrieveUserSvc = new RetrieveUserService({_id: req.user.id })          
+          // retrieveUserSvc.retrieve()
+          //   .then((user) => {
+          //     req.user = user
+          //     next()
+          //   })
+          //   .catch((error) => next(error))
         }
     ];
   }

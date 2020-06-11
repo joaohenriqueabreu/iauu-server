@@ -1,19 +1,25 @@
-const BaseService   = require('../base');
-const faker         = require('faker');
-const jwt           = require('jwt-simple')
+const jwt = require('jwt-simple')
+const faker = require('faker')
 
-module.exports = {
-    generate({id, name, email, type}) {        
+// in seconds - 30 days
+const tokenExpiration = 60 * 60 * 24 * 30
+
+module.exports = class GenerateTokenService {
+    static generateSimple(size = 128) {
+        return faker.random.alphaNumeric(size)
+    }
+
+    static generateForUser(user) {        
         const now = Math.floor(Date.now() / 1000)                
         const payload = {
-            type: type,
-            email: email,
-            name: name,
-            id: id,            
-            iat: now,
-            exp: now + (60 * 60 * 24)
+            role: user.role,
+            email: user.email,
+            name: user.name,
+            id: user.id,            
+            iat: now,            
+            exp: now + tokenExpiration 
         }
 
         return jwt.encode(payload, process.env.AUTH_SECRET)
-    }
+    }    
 }

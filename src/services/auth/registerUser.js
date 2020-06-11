@@ -1,39 +1,38 @@
-const BaseService = require('../base')
-const bcrypt = require('bcryptjs')
-const User = require('../../models/user')
-const GenerateTokenService = require('./generateToken')
+const AuthService = require('./auth')
+const User        = require('../../models/user')
+const SendMailService = require('../mail/sendMail')
 
-module.exports = class RegisterUserService extends BaseService {
-  constructor(name, email, password, type) {
-    super()
-    this.user = new User({name, email, type})  
-    console.log(this.user)    
-    
-    const hash = bcrypt.hashSync(password, 10);    
-    this.user.password = hash        
-  }
+module.exports = class RegisterUserService extends AuthService {
+  constructor(name, email, password, role) {
+    super()    
+    this.user.email = email
+    this.user.name = name
+    this.user.role = role
 
-  async register() { 
+    this.password = password    
+  }  
+
+  async checkUserExists() {
     const exists = await User.exists({email: this.user.email})    
     if (exists) {        
       throw new Error('User exists')
     }
-  
-    await this.generateToken().saveData()            
-    return this    
-  }
 
-  getToken() {
-    return this.user.token
-  }
-
-  generateToken() {
-    this.user.token = GenerateTokenService.generate(this.user)
     return this
+  }  
+
+  async sendRegistrationMail() {
+    const mailSvc = new SendMailService(this.user.email, 'Welcome to Iauu', 'register', this.user)
+    await mailSvc.sendMail()
   }
 
-  async saveData() {
-    await this.user.save()
+  async register() {     
+    await this.checkUserExists()
+    await this.encryptPassword(this.password)
+    this.generateAccessToken().generateVerificationToken()
+    await this.saveUser()
+    await this.sendRegistrationMail()
+
     return this
   }
 }
