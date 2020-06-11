@@ -22,17 +22,23 @@ module.exports = class RegisterUserService extends AuthService {
   }  
 
   async sendRegistrationMail() {
-    const mailSvc = new SendMailService(this.user.email, 'Welcome to Iauu', 'register', this.user)
-    await mailSvc.sendMail()
+    const mailSvc = new SendMailService(this.user.email, 'Welcome to Iauu')
+    await mailSvc.buildBody('register', this.user)
+    await mailSvc.send()    
+    return this
   }
 
-  async register() {     
+  async register() {  
+    // TODO Testing code
+    await User.deleteOne({email: this.user.email})   
     await this.checkUserExists()
     await this.encryptPassword(this.password)
     this.generateAccessToken().generateVerificationToken()
     await this.saveUser()
-    await this.sendRegistrationMail()
 
+    // Do not await for send mail, just start process, it is taking >3s to complete
+    this.sendRegistrationMail()
+    console.log('Registered user...')
     return this
   }
 }

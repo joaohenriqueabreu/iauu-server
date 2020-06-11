@@ -1,1 +1,5 @@
-<div>{{name}}</div>
+<html>
+  <body>
+  <div>{{name}}</div>
+  </body>
+</html>

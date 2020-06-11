@@ -1,7 +1,7 @@
 const validateRequest = require('@hapi/joi')
 
 const validate = (req, next, schema) => {
-    console.log('validating')
+    console.log('validating...')
     const options = {
         abortEarly: false, // include all errors
         allowUnknown: true, // ignore unknown props
@@ -11,15 +11,14 @@ const validate = (req, next, schema) => {
     const { error, value } = schema.validate(req.body, options);
     if (error) {
         next(`Validation error: ${error.details.map(x => x.message).join(', ')}`);
-    } else {
-        console.log('validation...ok')
-        req.body = value;
-        next();
-    }
+    } 
+
+    console.log('validated...')
+    req.body = value;
+    next();
 }
 
-const newCrendentials = (req, res, next) => { 
-    console.log(req.body)       
+const newCrendentials = (req, res, next) => {            
     const schema = validateRequest.object({
       name: validateRequest.string().required(),
       email: validateRequest.string().required(),

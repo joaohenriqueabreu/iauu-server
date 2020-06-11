@@ -14,14 +14,24 @@ async function start() {
         auth: {
             user: 'lauren.farrell69@ethereal.email',
             pass: 'rfkSczMZx9fx4syD4D'
-        }
+        },
+        tls: {
+            rejectUnauthorized: false
+        }    
     });
     
 }
 
 async function send(to, from, subject, message) {
-    const result = await transporter.sendMail({to, from, subject, html: message})
-    console.log(result)          
+    console.log('Trying to send email...')
+    try {
+        const result = await transporter.sendMail({to, from, subject, html: message})    
+        console.log('Mail sent...')
+        return result
+    } catch (error) {
+        console.log('Failed sending mail...')
+        console.log(error)          
+    }        
 }
 
 start().catch((error) => {
@@ -29,8 +39,3 @@ start().catch((error) => {
 })
 
 module.exports = { send }
-
-// module.exports = ({ to, subject, html, from = config.emailFrom }) => {
-//     const transporter = nodemailer.createTransport(config.smtpOptions);
-//     transporter.sendMail({ from, to, subject, html });
-// }

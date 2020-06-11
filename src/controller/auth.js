@@ -10,7 +10,7 @@ class AuthController extends BaseController {
       const {name, email, password, role} = req.body
       const registerUserSvc = new RegisterUserService(name, email, password, role)       
       registerUserSvc.register()
-        .then(() => { res.status(200).json(registerUserSvc.getToken()) })
+        .then(() => { res.status(200).json({message: 'Successfully registered. Please verify account'}) })
         .catch(error => next(error))                                                               
   }
 

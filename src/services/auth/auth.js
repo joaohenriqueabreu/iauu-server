@@ -28,7 +28,7 @@ module.exports = class AuthService extends BaseService {
   }
 
   async encryptPassword(password) {
-    const hash = await bcrypt.hashSync(password, 10);        
+    const hash = await bcrypt.hashSync(password, 2);        
     this.user.password = hash
   }
 
