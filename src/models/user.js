@@ -40,6 +40,11 @@ class User extends BaseModel {
   static findFromCredentials({email, password}) {
     return this.findOne({email, password})
   }
+
+  generateVerificationUrl() {
+    // TODO use dynamic hostname
+    return `http://localhost:8080/register/verify/${this.verification_token}`
+  }
 }
 
 // https://mongoosejs.com/docs/api.html#schema_Schema-loadClass

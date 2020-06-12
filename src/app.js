@@ -29,7 +29,12 @@ const whitelist     = process.env.CORS_WHITELIST
 const corsOptions   = {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     origin: function (origin, callback) {      
-        if (whitelist.indexOf(origin) !== -1) { callback(null, true) } 
+        console.log('New request received...')
+        console.log(`From ${origin}...`)
+        if (whitelist.indexOf(origin) !== -1) { 
+            console.log('Request accepted...')
+            callback(null, true) 
+        } 
         else { callback(new Error('Not allowed by CORS')) }
     }
 }

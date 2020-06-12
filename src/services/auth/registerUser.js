@@ -22,8 +22,8 @@ module.exports = class RegisterUserService extends AuthService {
   }  
 
   async sendRegistrationMail() {
-    const mailSvc = new SendMailService(this.user.email, 'Welcome to Iauu')
-    await mailSvc.buildBody('register', this.user)
+    const mailSvc = new SendMailService(this.user.email, 'IAUU | Verifique sua conta')
+    await mailSvc.buildBody('register', {user: this.user, url: this.user.generateVerificationUrl() })
     await mailSvc.send()    
     return this
   }
@@ -33,7 +33,7 @@ module.exports = class RegisterUserService extends AuthService {
     await User.deleteOne({email: this.user.email})   
     await this.checkUserExists()
     await this.encryptPassword(this.password)
-    this.generateAccessToken().generateVerificationToken()
+    await this.generateAccessToken().generateVerificationToken()
     await this.saveUser()
 
     // Do not await for send mail, just start process, it is taking >3s to complete

@@ -12,12 +12,15 @@ module.exports = class GenerateTokenService {
     static generateForUser(user) {        
         const now = Math.floor(Date.now() / 1000)                
         const payload = {
-            role: user.role,
-            email: user.email,
-            name: user.name,
-            id: user.id,            
-            iat: now,            
-            exp: now + tokenExpiration 
+            id:     user.id,
+            role:   [user.role], // Role must be an array for frontend $auth handle access scope
+            email:  user.email,
+            name:   user.name,            
+            photo:  {
+                url: faker.image.avatar()
+            },
+            iat:    now,            
+            exp:    now + tokenExpiration 
         }
 
         return jwt.encode(payload, process.env.AUTH_SECRET)

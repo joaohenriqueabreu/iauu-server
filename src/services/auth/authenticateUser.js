@@ -1,7 +1,7 @@
 const AuthService   = require('./auth');
 const User          = require('../../models/user')
 
-module.exports = class UserLoginService extends AuthService
+module.exports = class AuthenticateUserService extends AuthService
 {
     constructor(email, password) {
       super()

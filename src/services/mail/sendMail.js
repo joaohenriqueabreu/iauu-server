@@ -17,7 +17,7 @@ module.exports = class SendMailService extends BaseService {
 
     async buildBody(template, data) {      
       try {
-        const fileContent = await readFileAsync(`/usr/app/src/mail/${template}.js`, 'utf8')             
+        const fileContent = await readFileAsync(`/usr/app/src/mails/${template}.html`, 'utf8')             
         const html        = mustache.render(fileContent, data)
 
         console.log('Rendering mail template...')        
