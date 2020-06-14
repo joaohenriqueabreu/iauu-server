@@ -5,40 +5,44 @@ Now, let's define CORS middleware, to ensure we do not run into any cross origin
 // "use strict";
 
 // Express and Request config
-const express       = require('express')
-const bodyParser    = require('body-parser')
-const helmet        = require('helmet')
-const compression   = require('compression')
-const cors          = require('cors')
+const express = require('express')
+const bodyParser = require('body-parser')
+const helmet = require('helmet')
+const compression = require('compression')
+const cors = require('cors')
 
 // init db and connect
-const db            = require('./data/db')
+const db = require('./data/db')
 
 // Express config
-const app           = express();
+const app = express()
 
 // Express routing config
-const router        = express.Router()
-const routes        = require('./routes')
+const router = express.Router()
+const routes = require('./routes')
 const errorMiddleware = require('./middleware/error')
 
 require('dotenv').config()
 
 // Security middlewares
-const whitelist     = process.env.CORS_WHITELIST
-const corsOptions   = {
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    origin: function (origin, callback) {      
-        console.log('New request received...')
-        console.log(`From ${origin}...`)
-        if (whitelist.indexOf(origin) !== -1) { 
-            console.log('Request accepted...')
-            callback(null, true) 
-        } 
-        else { callback(new Error('Not allowed by CORS')) }
+const whitelist = process.env.CORS_WHITELIST
+// TODO These options are preventing frontend token validation (register and login works)
+const corsOptions = {
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: function (origin, callback) {
+    console.log('New request received...')
+    console.log(`From ${origin}...`)
+    if (whitelist.indexOf(origin) !== -1) {
+      console.log('Request accepted...')
+      callback(null, true)
+    } else {
+      console.log('Nope, not allowed by CORS ...')
+      callback(new Error('Not allowed by CORS'))
     }
+  },
 }
-app.use(cors(corsOptions));
+
+app.use(cors(corsOptions))
 app.use(helmet())
 app.use(compression())
 
@@ -54,9 +58,9 @@ app.use(router)
 app.use(routes)
 app.use(errorMiddleware)
 
-process.title = 'iauu.api';
-let port = process.env.PORT || 4444;
+process.title = 'iauu.api'
+let port = process.env.PORT || 4444
 
-let server = app.listen(port, function() {
-    console.log('Express server listening on port ' + port)
-});
+let server = app.listen(port, function () {
+  console.log('Express server listening on port ' + port)
+})
