@@ -10,7 +10,15 @@ module.exports = class AuthService extends BaseService {
       throw new TypeError('Cannot construct abstract class')
     }
 
-    this.user = new User()    
+    this.user = new User()
+  }
+
+  async validateUser(errorMessage) {
+    if (User.notFound(this.user)) {
+      throw new Error(`User not found: ${errorMessage}`)
+    }
+
+    return this
   }
 
   getToken() {
@@ -27,21 +35,26 @@ module.exports = class AuthService extends BaseService {
     return this
   }
 
+  async lookupUser(conditions) {
+    this.user = await User.fetchOne(conditions)
+    return this
+  }
+
   async encryptPassword(password) {
-    const hash = await bcrypt.hashSync(password, 2);        
+    const hash = await bcrypt.hashSync(password, 2)
     this.user.password = hash
   }
 
-  async validatePassword(password) {      
+  async validatePassword(password) {
     const result = await bcrypt.compare(password, this.user.password)
     return result
   }
 
   async saveUser() {
-    if (this.user.isModified) {      
+    if (this.user.isModified) {
       await this.user.save()
     }
-    
+
     return this
   }
 }
