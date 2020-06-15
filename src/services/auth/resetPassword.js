@@ -3,9 +3,10 @@ const User = require('../../models/user')
 const SendMailService = require('../mail/sendMail')
 
 module.exports = class ResetPasswordService extends AuthService {
-  constructor(email, password) {
+  constructor({email, token, password}) {
     super()
     this.email = email
+    this.token = token
     this.newPassword = password
   }
 
@@ -21,15 +22,28 @@ module.exports = class ResetPasswordService extends AuthService {
   }
 
   async reset() {
-    console.log('Trying to verify...')
-    await this.lookupUser()
-    await this.validateLogin()
-    await this.generateAccessToken()
-    await this.setUserAsVerified()
+    console.log('Renewing password...')     
+    await this.lookupUser({ verification_token: this.token })   
+    await this.validateUser('Invalid token provided')
+    await this.encryptPassword(this.newPassword) 
+    await this.resetVerificationToken()
     await this.saveUser()
 
-    this.sendWelcomeMail()
+    this.sendPwdChangedMail()
     return this
+  }
+
+  resetVerificationToken() {
+    this.user.verification_token = null
+    return this
+  }
+
+  async sendPwdChangedMail() {
+    this.mail = {
+      subject: 'Senha atualizada',
+      template: 'resetPassword',
+      data: this.user      
+    }
   }
 
   async sendForgotPasswordMail() {

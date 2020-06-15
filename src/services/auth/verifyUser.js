@@ -10,7 +10,7 @@ module.exports = class VerifyUserService extends AuthService {
 
   async verify() {
     console.log('Trying to verify...')
-    await this.lookupUser()
+    await this.lookupUser({ verification_token: this.token })
     await this.validateLogin()
     await this.generateAccessToken()
     await this.setUserAsVerified()
@@ -25,7 +25,7 @@ module.exports = class VerifyUserService extends AuthService {
     await this.lookupUser({ verification_token: this.token })
     await this.validateLogin()
     return this
-  }
+  }  
 
   async validateLogin() {
     if (User.notFound(this.user)) {

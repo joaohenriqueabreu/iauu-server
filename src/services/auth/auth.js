@@ -11,6 +11,11 @@ module.exports = class AuthService extends BaseService {
     }
 
     this.user = new User()
+    this.mail = {
+      subject: null,
+      template: null,
+      data: null
+    }
   }
 
   async validateUser(errorMessage) {
@@ -18,7 +23,13 @@ module.exports = class AuthService extends BaseService {
       throw new Error(`User not found: ${errorMessage}`)
     }
 
+    console.log('User found...')
+
     return this
+  }
+
+  getUser() {
+    return this.user
   }
 
   getToken() {
@@ -36,7 +47,7 @@ module.exports = class AuthService extends BaseService {
   }
 
   async lookupUser(conditions) {
-    this.user = await User.fetchOne(conditions)
+    this.user = await User.fetchOne(conditions, 'email name access_token verification_token password')
     return this
   }
 
@@ -55,6 +66,13 @@ module.exports = class AuthService extends BaseService {
       await this.user.save()
     }
 
+    return this
+  }
+
+  async sendMail() {
+    const mailSvc = new SendMailService(this.user.email, this.mail.subtitle)
+    await mailSvc.buildBody(this.mail.template, this.mail.data)
+    await mailSvc.send()
     return this
   }
 }

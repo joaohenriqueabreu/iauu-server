@@ -63,4 +63,14 @@ const forgotPassword = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
-module.exports = { token, newCrendentials, credentials, verify, forgotPassword }
+const resetPassword = (req, res, next) => {
+  const schema = validateRequest.object({
+    token: validateRequest.string().required(),
+    password: validateRequest.string().required(),
+    passwordConfirm: validateRequest.string().required(),
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
+module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword }

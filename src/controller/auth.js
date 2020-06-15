@@ -57,7 +57,7 @@ class AuthController extends BaseController {
 
   forgotPassword(req, res, next) {
     const { email } = req.data
-    const resetPasswordService = new ResetPasswordService(email)
+    const resetPasswordService = new ResetPasswordService({email})
     resetPasswordService
       .forgot()
       .then(() => {
@@ -66,7 +66,17 @@ class AuthController extends BaseController {
       .catch((error) => next(error))
   }
 
-  resetPassword(req, res) {}
+  resetPassword(req, res, next) {
+    const { token, password } = req.data    
+    const resetPasswordService = new ResetPasswordService({token, password})
+
+    resetPasswordService
+      .reset()
+      .then(() => {
+        res.status(200).json({ message: 'Successfully generated reset password token' })
+      })
+      .catch((error) => next(error))
+  }
 
   logoff(req, res) {
     res.status(200).json({})

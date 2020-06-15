@@ -13,6 +13,6 @@ api.delete('/login', authController.logoff)
 api.post('/register', validationMiddleware.newCrendentials, authController.register)
 api.post('/reset/forgot', validationMiddleware.forgotPassword, authController.forgotPassword)
 api.post('/reset/authorize', validationMiddleware.verify, authController.authorizeFromVerification)
-api.post('/reset/password', validationMiddleware.forgotPassword, authController.forgotPassword)
+api.post('/reset/password', validationMiddleware.verify, validationMiddleware.resetPassword, authController.resetPassword)
 
 module.exports = api
