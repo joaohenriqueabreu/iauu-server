@@ -18,6 +18,8 @@ const userSchema = new Schema({
   is_verified: { type: Boolean, default: false },
   reset_token: { type: String },
   reset_token_expiry: { type: Date },
+  facebook_id: { type: String},
+  google_id: { type: String },
   date_created: { type: Date, default: Date.now },
   date_updated: { type: Date },
 })

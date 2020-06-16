@@ -73,4 +73,9 @@ const resetPassword = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
-module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword }
+const oauth = (req, res, next) => {
+  req.data = { token: req.headers.authorization.replace('Bearer ', '')}
+  next()
+}
+
+module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth }

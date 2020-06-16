@@ -10,6 +10,10 @@ module.exports = class GenerateTokenService {
     }
 
     static generateForUser(user) {        
+        return jwt.encode(this.getUserPayload(user), process.env.AUTH_SECRET)
+    }
+
+    static getUserPayload(user) {     
         const now = Math.floor(Date.now() / 1000)                
         const payload = {
             id:     user.id,
@@ -22,7 +26,7 @@ module.exports = class GenerateTokenService {
             iat:    now,            
             exp:    now + tokenExpiration 
         }
-
-        return jwt.encode(payload, process.env.AUTH_SECRET)
+        
+        return payload
     }    
 }

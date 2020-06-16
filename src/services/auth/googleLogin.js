@@ -12,7 +12,7 @@ module.exports = class FacebookLoginService extends AuthService {
   async login() {
     await this.fetchProfile()
     await this.lookupUser({
-      $or: [{ facebook_id: this.socialData.id }, { email: this.socialData.email }],
+      $or: [{ google_id: this.socialData.sub }, { email: this.socialData.email }],
     })
     await this.registerNewUser()
     await this.saveUser()
@@ -22,9 +22,9 @@ module.exports = class FacebookLoginService extends AuthService {
   }
 
   async fetchProfile() {
-    console.log('Trying to get Facebook profile...')
+    console.log('Trying to get Google profile...')
     const { data } = await axios.get(
-      `https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday&access_token=${this.token}`
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${this.token}`
     )
 
     if (data === undefined) {
@@ -36,12 +36,10 @@ module.exports = class FacebookLoginService extends AuthService {
 
   async registerNewUser() {
     if (!User.notFound(this.user)) {
-      console.log('Found user')
-      // found user
-      // User might be login in with Facebook for the 1st or nth time
-      console.log(this.user.facebook_id)
-      if (this.user.facebook_id === undefined || this.user.facebook_id === null) {
-        this.user.facebook_id = this.socialData.id
+      console.log('Found user')            
+      console.log(this.user.google_id)
+      if (this.user.google_id === undefined || this.user.google_id === null) {
+        this.user.google_id = this.socialData.sub
       }
 
       return this
@@ -50,9 +48,11 @@ module.exports = class FacebookLoginService extends AuthService {
     this.user = new User({
       email: this.socialData.email,
       name: this.socialData.name,
-      password: this.socialData.id, // writing a "faker" pwd that will not be encrypted, but is required for saving
-      facebook_id: this.socialData.id,
-      photo: this.socialData.picture,
+      password: this.socialData.sub,
+      facebook_id: this.socialData.sub,
+      photo: {
+        url: this.socialData.picture
+      },
       is_verified: true,
     })
     return this

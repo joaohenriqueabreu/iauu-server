@@ -42,13 +42,17 @@ class AuthController extends BaseController {
   }
 
   facebookLogin(req, res, next) {
-    console.log('Social Login...')
-    const { token } = req.data
+    console.log('Facebook Login...')
+    const { token } = req.data    
     const facebookLoginService = new FacebookLoginService(token)
-    facebookLoginService
-      .login()
-      .then(() => res.status(200).send(facebookLoginService.getToken()))
-      .catch((error) => next(error))
+      facebookLoginService
+        .login()
+        .then(() => res.status(200).send(facebookLoginService.getPayload()))
+        .catch((error) => next(error))
+  }
+
+  googleLogin(req, res, next) {
+    console.log('Google Login...')
   }
 
   validate(req, res) {

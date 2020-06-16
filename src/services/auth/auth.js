@@ -16,6 +16,8 @@ module.exports = class AuthService extends BaseService {
       template: null,
       data: null
     }
+
+    this.payload = {}
   }
 
   async validateUser(errorMessage) {
@@ -36,6 +38,10 @@ module.exports = class AuthService extends BaseService {
     return this.user.access_token
   }
 
+  getPayload() {    
+    return this.payload
+  }
+
   generateAccessToken() {
     this.user.access_token = GenerateTokenService.generateForUser(this.user)
     return this
@@ -43,6 +49,11 @@ module.exports = class AuthService extends BaseService {
 
   generateVerificationToken() {
     this.user.verification_token = GenerateTokenService.generateSimple()
+    return this
+  }
+
+  generateUserPayload() {    
+    this.payload = GenerateTokenService.getUserPayload(this.user)
     return this
   }
 
