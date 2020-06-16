@@ -6,6 +6,7 @@ const AuthenticateUserService = require('../services/auth/authenticateUser')
 const VerifyUserService = require('../services/auth/verifyUser')
 const ResetPasswordService = require('../services/auth/resetPassword')
 const FacebookLoginService = require('../services/auth/facebookLogin')
+const GoogleLoginService = require('../services/auth/googleLogin')
 
 class AuthController extends BaseController {
   register(req, res, next) {
@@ -52,7 +53,13 @@ class AuthController extends BaseController {
   }
 
   googleLogin(req, res, next) {
-    console.log('Google Login...')
+    console.log('Facebook Login...')
+    const { token } = req.data    
+    const googleLoginService = new GoogleLoginService(token)
+      googleLoginService
+        .login()
+        .then(() => res.status(200).send(googleLoginService.getPayload()))
+        .catch((error) => next(error))
   }
 
   validate(req, res) {
