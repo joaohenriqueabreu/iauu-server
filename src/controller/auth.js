@@ -5,6 +5,7 @@ const RegisterUserService = require('../services/auth/registerUser')
 const AuthenticateUserService = require('../services/auth/authenticateUser')
 const VerifyUserService = require('../services/auth/verifyUser')
 const ResetPasswordService = require('../services/auth/resetPassword')
+const FacebookLoginService = require('../services/auth/facebookLogin')
 
 class AuthController extends BaseController {
   register(req, res, next) {
@@ -40,6 +41,16 @@ class AuthController extends BaseController {
       .catch((error) => next(error))
   }
 
+  facebookLogin(req, res, next) {
+    console.log('Social Login...')
+    const { token } = req.data
+    const facebookLoginService = new FacebookLoginService(token)
+    facebookLoginService
+      .login()
+      .then(() => res.status(200).send(facebookLoginService.getToken()))
+      .catch((error) => next(error))
+  }
+
   validate(req, res) {
     console.log('Request authorized...')
     res.status(200).json(req.user)
@@ -57,7 +68,7 @@ class AuthController extends BaseController {
 
   forgotPassword(req, res, next) {
     const { email } = req.data
-    const resetPasswordService = new ResetPasswordService({email})
+    const resetPasswordService = new ResetPasswordService({ email })
     resetPasswordService
       .forgot()
       .then(() => {
@@ -67,8 +78,8 @@ class AuthController extends BaseController {
   }
 
   resetPassword(req, res, next) {
-    const { token, password } = req.data    
-    const resetPasswordService = new ResetPasswordService({token, password})
+    const { token, password } = req.data
+    const resetPasswordService = new ResetPasswordService({ token, password })
 
     resetPasswordService
       .reset()

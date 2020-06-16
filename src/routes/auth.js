@@ -7,12 +7,18 @@ const validationMiddleware = require('../middleware/validation')
 
 api.post('/validate', jwt({ secret: process.env.AUTH_SECRET }), authController.validate)
 api.post('/login', validationMiddleware.credentials, authController.login)
+api.post('/login/facebook', validationMiddleware.verify, authController.facebookLogin)
 api.get('/register', authController.register)
 api.post('/verify', validationMiddleware.verify, authController.verify)
 api.delete('/login', authController.logoff)
 api.post('/register', validationMiddleware.newCrendentials, authController.register)
 api.post('/reset/forgot', validationMiddleware.forgotPassword, authController.forgotPassword)
 api.post('/reset/authorize', validationMiddleware.verify, authController.authorizeFromVerification)
-api.post('/reset/password', validationMiddleware.verify, validationMiddleware.resetPassword, authController.resetPassword)
+api.post(
+  '/reset/password',
+  validationMiddleware.verify,
+  validationMiddleware.resetPassword,
+  authController.resetPassword
+)
 
 module.exports = api
