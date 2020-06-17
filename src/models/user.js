@@ -1,3 +1,4 @@
+require('dotenv').config()
 const db = require('../data/db')
 const BaseModel = require('./base')
 
@@ -45,11 +46,11 @@ class User extends BaseModel {
 
   generateVerificationUrl() {
     // TODO use dynamic hostname
-    return `http://localhost:3333/register/verify/${this.verification_token}`
+    return `${process.env.WEB_URL}/register/verify/${this.verification_token}`
   }
 
   generateResetPasswordUrl() {
-    return `http://localhost:3333/reset/password/${this.verification_token}`
+    return `${process.env.WEB_URL}/reset/password/${this.verification_token}`
   }
 }
 
