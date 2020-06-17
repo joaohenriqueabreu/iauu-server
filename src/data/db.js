@@ -38,8 +38,7 @@ const run = async () => {
   const dbname      = encodeURIComponent(process.env.DB_NAME)   
   const authSource  = encodeURIComponent(process.env.DB_AUTH_SOURCE)   
   const dbport      = encodeURIComponent(process.env.DB_PORT)
-
-  console.log(`mongodb://${username}:${password}@${hostname}/${dbname}`) 
+  
   await mongoose.connect(`mongodb://${username}:${password}@${hostname}:${dbport}/${dbname}?authSource=${authSource}`, connectionOptions)
 }
 

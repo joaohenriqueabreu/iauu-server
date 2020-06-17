@@ -3,6 +3,7 @@ const fs = require('fs')
 const mailer = require('../../config/mail')
 const mustache = require('mustache')
 const { promisify } = require('util')
+const path = require('path')
 
 const readFileAsync = promisify(fs.readFile)
 
@@ -15,9 +16,10 @@ module.exports = class SendMailService extends BaseService {
       this.subject = subject            
     }  
 
-    async buildBody(template, data) {      
-      try {
-        const fileContent = await readFileAsync(`/usr/app/src/mails/${template}.html`, 'utf8')             
+    async buildBody(template, data) {
+      try {        
+        const templatePath = path.join(__dirname, '..', '..', 'mails', `${template}.html`)
+        const fileContent = await readFileAsync(templatePath, 'utf8')             
         const html        = mustache.render(fileContent, data)
 
         console.log('Rendering mail template...')        
