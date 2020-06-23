@@ -1,35 +1,28 @@
 require('dotenv').config()
-const jwt = require('express-jwt');
-const RetrieveUserService = require('../services/user/retrieveUser')
+const jwt = require('express-jwt')
 
-const authorize = (roles = []) => {
-  // roles param can be a single role string (e.g. Role.User or 'User') 
-  // or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', 'User'])
-  if (typeof roles === 'string') {
-      roles = [roles];
-  }    
-  console.log('Authorizing...')  
-  return jwt({secret: process.env.AUTH_SECRET})
-  
-  // return [      
-      // authenticate JWT token and attach user to request object (req.user)
-      // jwt({secret: process.env.AUTH_SECRET}),        
+const authorize = jwt({ secret: process.env.AUTH_SECRET })
+const owner = (req, res, next) => {
+  // Should always come after authorize 
+  console.log('Checking if user owns request...')
+  if (req.user.id !== req.params.id) {
+    console.log('Not the owner')
+    next('Unauthorized')
+  }
 
-      // authorize based on user role
-      // async (req, res, next) => {
-      //   console.log('Authorized...')          
-
-        // For now only parse jwt token
-        // next()
-        // const retrieveUserSvc = new RetrieveUserService({_id: req.user.id })          
-        // retrieveUserSvc.retrieve()
-        //   .then((user) => {
-        //     req.user = user
-        //     next()
-        //   })
-        //   .catch((error) => next(error))
-  //     }
-  // ];
+  console.log('Owner...')
+  next()
 }
 
-module.exports = { authorize }
+const artist = (req, res, next) => {
+  console.log('Checking if user is artist...')
+  if (!req.user.role.includes('artist')) {
+    console.log('Not an artist')
+    next('Unauthorized')
+  }
+
+  console.log('Artist...')
+  next()  
+}
+
+module.exports = { authorize, owner, artist }

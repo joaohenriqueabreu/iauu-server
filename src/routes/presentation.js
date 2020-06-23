@@ -1,4 +1,5 @@
 const api   = require('express').Router()
+const faker = require('faker')
 
 const { Proposal, Presentation, Timeslot, Product, Location, Contractor, Artist, Media } = require('../seeds')
 
@@ -39,7 +40,7 @@ api.delete('/proposals/:id', (req, res) => {
 api.get('/presentations/:id', (req, res) => {
   console.log(`Asking for presentation ${req.params.id}`)
   let presentation = new Presentation()
-  presentation.id = req.params.id
+  presentation.id = req.params.id  
 
   presentation.location = new Location()
   presentation.contractor = new Contractor()
@@ -64,3 +65,5 @@ api.post('/presentations/:id', (req, res) => {
 api.delete('/presentations/:id', (req, res) => {
   res.status(200).json(successMessage)
 })
+
+module.exports = api
