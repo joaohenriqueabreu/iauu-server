@@ -14,8 +14,11 @@ module.exports = class SearchProfileService extends BaseService
       return this
     }
 
-    async lookupUser() {
-      this.artist = await Artist.findById(this.id)      
+    async lookupArtist() {
+      console.log('Searching for artist with...')      
+      this.artist = await await Artist.fetchOneWith({ user: this.id }, ['user'])
+      console.log(this.artist)      
+      console.log('Found artist...')
       return this
     }
 

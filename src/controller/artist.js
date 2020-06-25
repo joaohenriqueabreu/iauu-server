@@ -1,7 +1,6 @@
 'use strict'
 
 const BaseController = require('./base')
-
 const SearchProfileService = require('../services/artist/searchProfile')
 
 const faker = require('faker')
@@ -43,17 +42,19 @@ class ArtistController extends BaseController {
   }
 
   profile(req, res, next) {
-    console.log("Requisting artist...")    
+    console.log("Requesting artist...")    
 
-    artistProfileSvc = new ArtistProfileSvc(req.user.id)
-    artistProfileSvc
+    const searchProfileSvc = new SearchProfileService(req.user.id)
+    searchProfileSvc
       .search()
       .then(() => {
-        res.status(200).json(artistProfileSvc.getArtist())
+        res.status(200).json(searchProfileSvc.getArtist())
       })
-      .catch((error) => next(error))
+      .catch((error) => next(error))    
+  }
 
-    res.status(200).json(artist)
+  updateProfile(req, res, next) {
+    console.log("Updating profile...")
   }
 
   save(req, res, next) {

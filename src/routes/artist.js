@@ -9,12 +9,11 @@ api.get('/categories', artistController.categories)
 api.get('/categories/:id/subcategories', artistController.subcategories)
 api.get('/artists/:id/public', artistController.publicInfo)
 api.get('/artists/:id/private', authorizationMiddleware.authorize, artistController.privateInfo)
+
 api.get('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.profile)
+api.put('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.updateProfile)
 
 module.exports = api
-
-
-
 
 // const api   = require('express').Router()
 // const faker     = require('faker')

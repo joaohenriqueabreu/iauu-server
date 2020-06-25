@@ -1,24 +1,34 @@
 const db = require('../data/db')
+const { forEach } = require('../seeds/social')
 
 module.exports = class BaseModel {
   constructor(schema) {
-    if (this.constructor === BaseModel) { throw new TypeError('Cannot construct abstract class') }
+    if (this.constructor === BaseModel) { throw new TypeError('Cannot construct abstract class') }        
   }
 
-  static async findById(id) {
-    const { error, model } = await this.findOne({id})
+  static async fetchById(id) {    
+    const { error, model } = await this.findById({id})
     return this.handleQuery(error, model)
   } 
   
-  static async fetch(data) {    
-    return this.find(data, this.handleQuery)    
+  static async fetch(condition) {    
+    return this.find(condition, this.handleQuery)
   }
 
-  static async fetchOne(data) {
-    return this.findOne(data, this.handleQuery)
+  static async fetchOne(condition) {    
+    return this.findOne(condition, this.handleQuery)
   }
 
-  static handleQuery(error, models) { 
+  static async fetchOneWith(condition, refs) {
+    const result = this.findOne(condition).select()
+    refs.forEach(ref => {
+      result.populate(ref)
+    })
+
+    return result
+  }
+
+  static handleQuery(error, models) {
     if (error !== undefined && error !== null) {      
       throw new Error('Model not found')
     }

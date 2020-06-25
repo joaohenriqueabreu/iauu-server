@@ -1,5 +1,7 @@
 module.exports = (err, req, res, next) => {  
-    switch (true) {
+    console.log('Something is wrong...')
+    console.log(err)
+    switch (true) {        
         case typeof err === 'string':
             // custom application error
             const is404 = err.toLowerCase().endsWith('not found');

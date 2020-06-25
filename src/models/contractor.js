@@ -6,13 +6,13 @@ const address = require('./address')
 
 const { Schema } = db
 
-const artistSchema = new Schema({
+const contractorSchema = new Schema({
   user :{
     type: db.Schema.Types.ObjectId,
     ref: 'User'
   },
 
-  company_name: { type: String },
+  company_name: { type: String, required: true },
   story: { type: String },
   media: {
     bg: { type: String },
@@ -24,11 +24,11 @@ const artistSchema = new Schema({
   
 })
 
-class Artist extends BaseModel {
+class Contractor extends BaseModel {
   constructor() {
     super()
   }
 }
 
-artistSchema.loadClass(Artist)
-module.exports = db.model('Artist', artistSchema)
+contractorSchema.loadClass(Contractor)
+module.exports = db.model('Contractor', contractorSchema)

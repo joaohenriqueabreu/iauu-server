@@ -50,7 +50,7 @@ module.exports = class FacebookLoginService extends AuthService {
     this.user = new User({
       email: this.socialData.email,
       name: this.socialData.name,
-      password: this.socialData.id, // writing a "faker" pwd that will not be encrypted, but is required for saving
+      password: this.socialData.id, // writing a "fake" pwd that will not be encrypted, but is required for saving
       facebook_id: this.socialData.id,
       photo: this.socialData.picture,
       is_verified: true,

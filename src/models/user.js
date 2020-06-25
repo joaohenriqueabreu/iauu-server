@@ -6,34 +6,24 @@ const { Schema } = db
 
 const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   role: { type: String, required: true, enum: ['artist', 'contractor', 'admin'] },
   name: { type: String, required: true },
-  access_token: { type: String, required: true },
+  access_token: { type: String, required: true, select: false },
   title: { type: String },
   first_name: { type: String },
   last_name: { type: String },
   accept_terms: { type: Boolean },
   role: { type: String },
-  verification_token: { type: String },
+  verification_token: { type: String, select: false },
   is_verified: { type: Boolean, default: false },
-  reset_token: { type: String },
+  reset_token: { type: String, select: false },
   reset_token_expiry: { type: Date },
   facebook_id: { type: String},
   google_id: { type: String },
   date_created: { type: Date, default: Date.now },
   date_updated: { type: Date },
 })
-
-// Schema.set('toJSON', {
-//   virtuals: true,
-//   versionKey: false,
-//   transform: function (doc, ret) {
-//       // remove these props when object is serialized
-//       delete ret._id;
-//       delete ret.password;
-//   }
-// });
 
 class User extends BaseModel {
   constructor() {
