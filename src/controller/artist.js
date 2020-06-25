@@ -2,6 +2,7 @@
 
 const BaseController = require('./base')
 const SearchProfileService = require('../services/artist/searchProfile')
+const ArtistProfileService = require('../services/artist/artistProfile')
 
 const faker = require('faker')
 const { Artist, Product } = require('../seeds')
@@ -47,18 +48,16 @@ class ArtistController extends BaseController {
     const searchProfileSvc = new SearchProfileService(req.user.id)
     searchProfileSvc
       .search()
-      .then(() => {
-        res.status(200).json(searchProfileSvc.getArtist())
-      })
+      .then(() => { res.status(200).json(searchProfileSvc.getArtist()) })
       .catch((error) => next(error))    
   }
 
   updateProfile(req, res, next) {
-    console.log("Updating profile...")
-  }
-
-  save(req, res, next) {
-
+    console.log("Updating profile...")       
+    const artistProfileSvc = new ArtistProfileService(req.data)
+      .save()
+      .then(() => { res.status(200).json({}) })
+      .catch((error) => next(error))
   }
 
   categories(req, res, next) {

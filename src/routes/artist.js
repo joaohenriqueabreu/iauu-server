@@ -11,7 +11,7 @@ api.get('/artists/:id/public', artistController.publicInfo)
 api.get('/artists/:id/private', authorizationMiddleware.authorize, artistController.privateInfo)
 
 api.get('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.profile)
-api.put('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.updateProfile)
+api.put('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.profile, artistController.updateProfile)
 
 module.exports = api
 

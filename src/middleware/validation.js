@@ -78,4 +78,12 @@ const oauth = (req, res, next) => {
   next()
 }
 
-module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth }
+const profile = (req, res, next) => {
+  const schema = validateRequest.object({
+    profile: validateRequest.object().required()
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
+module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth, profile }

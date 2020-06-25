@@ -1,12 +1,11 @@
 const Artist = require('../../models/artist')
-const BaseService = require('../base')
+const ArtistService = require('./base')
 
-module.exports = class SearchProfileService extends BaseService
+module.exports = class SearchProfileService extends ArtistService
 {
     constructor(id) {
       super()
-      this.id = id
-      this.artist = {}
+      this.id = id      
     }
 
     async search() {
@@ -20,9 +19,5 @@ module.exports = class SearchProfileService extends BaseService
       console.log(this.artist)      
       console.log('Found artist...')
       return this
-    }
-
-    getArtist() {
-      return this.artist
     }
 }
