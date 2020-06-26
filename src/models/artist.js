@@ -2,7 +2,8 @@ require('dotenv').config()
 const db = require('../data/db')
 const BaseModel = require('./base')
 
-const address = require('./address')
+const addressSchema = require('./address')
+const socialSchema = require('./media')
 
 const { Schema } = db
 
@@ -13,15 +14,16 @@ const artistSchema = new Schema({
   },
 
   company_name: { type: String },
+  document: { type: String },
+  phone: { type: String },
   story: { type: String },
   media: {
     bg: { type: String },
     photo: { type: String },
     presentations: [String]
   },
-  social: [String],
-  address: {type: address}
-  
+  social: [socialSchema],
+  address: addressSchema
 })
 
 class Artist extends BaseModel {

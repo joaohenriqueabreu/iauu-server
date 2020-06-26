@@ -50,6 +50,7 @@ module.exports = class ArtistProfileService extends ArtistService
         this.artist[prop] = this.data[prop]
       }
       
+      console.log(this.data)
       console.log('Artist ready to save...')
       console.log(this.artist)
       return this
