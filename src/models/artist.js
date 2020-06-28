@@ -22,6 +22,11 @@ const artistSchema = new Schema({
     photo: { type: String },
     presentations: [String]
   },
+  category: {
+    name: { type: String },
+    subcategories: [String]
+  },
+  tags: [String],
   social: [socialSchema],
   address: addressSchema
 })

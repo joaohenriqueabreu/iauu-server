@@ -10,16 +10,11 @@ module.exports = class AuthenticateUserService extends AuthService
     }
 
     async login() {
-      await this.lookupUser()
+      await this.lookupUser({ email: this.email })
       await this.validateLogin()
-      this.generateAccessToken()
+      await this.generateAccessToken()
       await this.saveUser()
 
-      return this
-    }
-
-    async lookupUser() {
-      this.user = await User.fetchOne({email: this.email})      
       return this
     }
 

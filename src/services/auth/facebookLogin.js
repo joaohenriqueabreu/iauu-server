@@ -1,28 +1,13 @@
-const AuthService = require('./auth')
+const SocialLoginService = require('./socialLogin')
 const User = require('../../models/user')
 const axios = require('axios')
 
-module.exports = class FacebookLoginService extends AuthService {
+module.exports = class FacebookLoginService extends SocialLoginService {
   constructor(token) {
-    super()
-    this.token = token
-    this.socialData = {}    
+    super(token)        
   }
 
-  async login() {
-    await this.fetchProfile()
-    await this.lookupUser({
-      $or: [{ facebook_id: this.socialData.id }, { email: this.socialData.email }],
-    })
-    await this.registerNewUser()
-    await this.saveUser()
-    await this.generateUserPayload()
-
-    return this
-  }
-
-  async fetchProfile() {
-    console.log('Trying to get Facebook profile...')
+  async fetchProfile() {    
     const { data } = await axios.get(
       `https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday&access_token=${this.token}`
     )
@@ -34,19 +19,24 @@ module.exports = class FacebookLoginService extends AuthService {
     this.socialData = data
   }
 
-  async registerNewUser() {
-    if (!User.notFound(this.user)) {
-      console.log('Found user')
-      // found user
-      // User might be login in with Facebook for the 1st or nth time
-      console.log(this.user.facebook_id)
-      if (this.user.facebook_id === undefined || this.user.facebook_id === null) {
-        this.user.facebook_id = this.socialData.id
-      }
+  async lookupUserFromSocial() {
+    await this.lookupUser({
+      $or: [{ facebook_id: this.socialData.id }, { email: this.socialData.email }],
+    })
 
+    if (this.user === undefined || User.notFound(this.user)) {
+      await this.populateFromSocialData()
       return this
     }
 
+    if (this.user.facebook_id === undefined || this.user.facebook_id === null) {
+      this.user.facebook_id = this.socialData.id
+    }
+
+    return this
+  }
+
+  async populateFromSocialData() {
     this.user = new User({
       email: this.socialData.email,
       name: this.socialData.name,
@@ -55,6 +45,7 @@ module.exports = class FacebookLoginService extends AuthService {
       photo: this.socialData.picture,
       is_verified: true,
     })
+
     return this
   }
 }

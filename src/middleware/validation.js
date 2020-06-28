@@ -1,4 +1,5 @@
 const validateRequest = require('@hapi/joi')
+const { ValidationError } = require('@hapi/joi')
 
 const validate = (data, req, next, schema) => {
   console.log('Validating Request...')
@@ -21,9 +22,8 @@ const validate = (data, req, next, schema) => {
 const newCrendentials = (req, res, next) => {
   const schema = validateRequest.object({
     name: validateRequest.string().required(),
-    email: validateRequest.string().required(),
+    email: validateRequest.string().email().required(),
     password: validateRequest.string().required(),
-    role: validateRequest.string().required(),
   })
 
   return validate(req.body, req, next, schema)
@@ -49,7 +49,7 @@ const verify = (req, res, next) => {
 
 const token = (req, res, next) => {
   const schema = validateRequest.object({
-    token: validateRequest.string().required(),
+    token: validateRequest.string().valid('artist, contractor').required(),
   })
 
   return validate(req.headers, req, next, schema)
@@ -73,6 +73,14 @@ const resetPassword = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const role = (req, res, next) => {
+  const schema = validateRequest.object({
+    role: validateRequest.string().required()
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
 const oauth = (req, res, next) => {
   req.data = { token: req.headers.authorization.replace('Bearer ', '')}
   next()
@@ -86,4 +94,4 @@ const profile = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
-module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth, profile }
+module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth, profile, role }

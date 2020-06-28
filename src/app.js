@@ -24,25 +24,22 @@ const errorMiddleware = require('./middleware/error')
 
 require('dotenv').config()
 
-// Security middlewares
-const whitelist = process.env.CORS_WHITELIST
-// TODO These options are preventing frontend token validation (register and login works)
 const corsOptions = {
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  origin: function (origin, callback) {
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  origin: function (origin, next) {
     console.log('New request received...')
     console.log(`From ${origin}...`)
-    if (whitelist.indexOf(origin) !== -1) {
+    if (process.env.CORS_WHITELIST.indexOf(origin) !== -1) {
       console.log('Request accepted...')
-      callback(null, true)
-    } else {
-      console.log('Nope, not allowed by CORS ...')
-      callback(new Error('Not allowed by CORS'))
+      next(null, true)
+    } else {      
+      next(new Error('Not allowed by CORS'))
     }
   },
 }
 
-app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
+app.use(cors())
 app.use(helmet())
 app.use(compression())
 

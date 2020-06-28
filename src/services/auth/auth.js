@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const BaseService = require('../base')
-const User = require('../../models/user')
+const { User, Artist, Contractor } = require('../../models')
 const GenerateTokenService = require('./generateToken')
 
 module.exports = class AuthService extends BaseService {
@@ -42,23 +42,28 @@ module.exports = class AuthService extends BaseService {
     return this.payload
   }
 
-  generateAccessToken() {
-    this.user.access_token = GenerateTokenService.generateForUser(this.user)
+  async generateAccessToken() {
+    this.user.access_token = await GenerateTokenService.generateForUser(this.user)
     return this
   }
 
   generateVerificationToken() {
     this.user.verification_token = GenerateTokenService.generateSimple()
     return this
+  }  
+
+  async generateUserPayload() {    
+    this.payload = await GenerateTokenService.getUserPayload(this.user)    
+    return this
   }
 
-  generateUserPayload() {    
-    this.payload = GenerateTokenService.getUserPayload(this.user)
+  async lookupUserById(id) {
+    this.user = await User.fetchWithSensitiveDataById(id)
     return this
   }
 
   async lookupUser(conditions) {
-    this.user = await User.fetchOne(conditions, 'email name access_token verification_token password')
+    this.user = await User.fetchWithSensitiveData(conditions)
     return this
   }
 
@@ -73,8 +78,10 @@ module.exports = class AuthService extends BaseService {
   }
 
   async saveUser() {
-    if (this.user.isModified) {
+    console.log('Trying to save user...')    
+    if (this.user.isModified) {      
       await this.user.save()
+      console.log('User updated...')
     }
 
     return this

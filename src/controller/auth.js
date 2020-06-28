@@ -7,16 +7,15 @@ const VerifyUserService = require('../services/auth/verifyUser')
 const ResetPasswordService = require('../services/auth/resetPassword')
 const FacebookLoginService = require('../services/auth/facebookLogin')
 const GoogleLoginService = require('../services/auth/googleLogin')
+const AssignRoleService = require('../services/auth/assignRole')
 
 class AuthController extends BaseController {
   register(req, res, next) {
     const { name, email, password, role } = req.data
     const registerUserSvc = new RegisterUserService(name, email, password, role)
-    registerUserSvc
-      .register()
-      .then(() => {
-        res.status(200).json({ message: 'Successfully registered. Please verify account' })
-      })
+
+    registerUserSvc.register()
+      .then(() => res.status(200).json({ message: 'Successfully registered. Please verify account' }))
       .catch((error) => next(error))
   }
 
@@ -24,8 +23,7 @@ class AuthController extends BaseController {
     const { token } = req.data
     const verifyUserService = new VerifyUserService(token)
 
-    verifyUserService
-      .verify()
+    verifyUserService.verify()
       .then(() => res.status(200).send(verifyUserService.getToken()))
       .catch((error) => next(error))
   }
@@ -34,11 +32,8 @@ class AuthController extends BaseController {
     const { email, password } = req.data
     const authenticateUserService = new AuthenticateUserService(email, password)
 
-    authenticateUserService
-      .login()
-      .then(() => {
-        res.status(200).json(authenticateUserService.getToken())
-      })
+    authenticateUserService.login()
+      .then(() => res.status(200).json(authenticateUserService.getToken()))
       .catch((error) => next(error))
   }
 
@@ -46,33 +41,37 @@ class AuthController extends BaseController {
     console.log('Facebook Login...')
     const { token } = req.data    
     const facebookLoginService = new FacebookLoginService(token)
-      facebookLoginService
-        .login()
-        .then(() => res.status(200).send(facebookLoginService.getPayload()))
+
+    facebookLoginService.login()
+        .then(() => res.status(200).json(facebookLoginService.geToken()))
         .catch((error) => next(error))
   }
 
   googleLogin(req, res, next) {
-    console.log('Facebook Login...')
+    console.log('Google Login...')
     const { token } = req.data    
     const googleLoginService = new GoogleLoginService(token)
-      googleLoginService
-        .login()
-        .then(() => res.status(200).send(googleLoginService.getPayload()))
+
+    googleLoginService.login()
+        .then(() => res.status(200).json(googleLoginService.getToken()))
         .catch((error) => next(error))
   }
 
-  validate(req, res) {
-    console.log('Request authorized...')
-    res.status(200).json(req.user)
+  assignRole(req, res, next) {
+    console.log('Assigning user role...')
+    const { role } = req.data
+    const assignRoleService = new AssignRoleService(req.user, role)
+
+    assignRoleService.assign()
+      .then(() => res.status(200).json(assignRoleService.getToken()))
+      .catch((error) => next(error))
   }
 
   authorizeFromVerification(req, res, next) {
     const { token } = req.data
     const verifyUserService = new VerifyUserService(token)
 
-    verifyUserService
-      .authorize()
+    verifyUserService.authorize()
       .then(() => res.status(200).send({ message: 'Authorized from verification token' }))
       .catch((error) => next(error))
   }
@@ -80,11 +79,8 @@ class AuthController extends BaseController {
   forgotPassword(req, res, next) {
     const { email } = req.data
     const resetPasswordService = new ResetPasswordService({ email })
-    resetPasswordService
-      .forgot()
-      .then(() => {
-        res.status(200).json({ message: 'Successfully generated reset password token' })
-      })
+    resetPasswordService.forgot()
+      .then(() => res.status(200).json({ message: 'Successfully generated reset password token' }))
       .catch((error) => next(error))
   }
 
@@ -92,12 +88,16 @@ class AuthController extends BaseController {
     const { token, password } = req.data
     const resetPasswordService = new ResetPasswordService({ token, password })
 
-    resetPasswordService
-      .reset()
+    resetPasswordService.reset()
       .then(() => {
         res.status(200).json({ message: 'Successfully generated reset password token' })
       })
       .catch((error) => next(error))
+  }
+
+  validate(req, res) {
+    console.log('Request authorized...')
+    res.status(200).json(req.user)
   }
 
   logoff(req, res) {

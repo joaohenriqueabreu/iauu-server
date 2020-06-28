@@ -3,16 +3,15 @@ const { User, Artist, Contractor } = require('../../models')
 const SendMailService = require('../mail/sendMail')
 
 module.exports = class RegisterUserService extends AuthService {
-  constructor(name, email, password, role) {
+  constructor(name, email, password) {
     super()
     
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password) {
       throw new Error('Invalid user info...')
     }
 
     this.user.email = email
-    this.user.name = name
-    this.user.role = role
+    this.user.name = name    
 
     this.password = password    
   }  
@@ -24,40 +23,10 @@ module.exports = class RegisterUserService extends AuthService {
     }
 
     return this
-  }
-  
-  async createUserRole() {
-    if (this.user.role === 'artist') {
-      await this.createArtist()
-      return this
-    }
-
-    if (this.user.role === 'contractor') {
-      await this.createContractor()
-      return this
-    }
-
-    throw new Error('Invalid role provided...')
-  }
-
-  async createArtist() {
-    let artist = new Artist()
-    artist.user = this.user.id
-
-    await artist.save()
-    return this
-  }
-
-  async createContractor() {
-    let contractor = new Contractor()
-    contractor.user = this.user.id
-
-    await contractor.save()
-    return this
-  }
+  }    
 
   async sendRegistrationMail() {
-    const mailSvc = new SendMailService(this.user.email, 'IAUU | Verifique sua conta')
+    const mailSvc = new SendMailService(this.user.email, 'iauu | Verifique sua conta')
     await mailSvc.buildBody('register', {user: this.user, url: this.user.generateVerificationUrl() })
     await mailSvc.send()    
     return this
@@ -68,8 +37,7 @@ module.exports = class RegisterUserService extends AuthService {
     await this.encryptPassword(this.password)
     await this.generateAccessToken()
     await this.generateVerificationToken()
-    await this.saveUser()
-    await this.createUserRole()
+    await this.saveUser()    
 
     // Do not await for send mail, just start process, it is taking >3s to complete
     this.sendRegistrationMail()

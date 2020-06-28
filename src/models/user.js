@@ -7,7 +7,7 @@ const { Schema } = db
 const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true, select: false },
-  role: { type: String, required: true, enum: ['artist', 'contractor', 'admin'] },
+  role: { type: String, enum: ['artist', 'contractor', 'admin'] },
   name: { type: String, required: true },
   access_token: { type: String, required: true, select: false },
   title: { type: String },
@@ -21,6 +21,14 @@ const userSchema = new Schema({
   reset_token_expiry: { type: Date },
   facebook_id: { type: String},
   google_id: { type: String },
+  artist: {
+    type: db.Schema.Types.ObjectId,
+    ref: 'Artist'
+  },
+  contractor: {
+    type: db.Schema.Types.ObjectId,
+    ref: 'Contractor'
+  },
   date_created: { type: Date, default: Date.now },
   date_updated: { type: Date },
 })
@@ -34,8 +42,21 @@ class User extends BaseModel {
     return this.findOne({ email, password })
   }
 
+  static fetchWithSensitiveDataById(id) {
+    return this.findById(id)
+      .select('+password +access_token +verification_token')
+      .populate('artist')
+      .populate('contractor')      
+  }
+
+  static fetchWithSensitiveData(conditions) {    
+    return this.findOne(conditions)
+      .select('+password +access_token +verification_token')
+      .populate('artist')
+      .populate('contractor')      
+  }
+
   generateVerificationUrl() {
-    // TODO use dynamic hostname
     return `${process.env.WEB_URL}/register/verify/${this.verification_token}`
   }
 

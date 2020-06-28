@@ -1,5 +1,6 @@
 const db = require('../data/db')
 const { forEach } = require('../seeds/social')
+const user = require('./user')
 
 module.exports = class BaseModel {
   constructor(schema) {
@@ -15,7 +16,7 @@ module.exports = class BaseModel {
     return this.find(condition, this.handleQuery)
   }
 
-  static async fetchOne(condition) {    
+  static async fetchOne(condition) {
     return this.findOne(condition, this.handleQuery)
   }
 

@@ -4,21 +4,7 @@ const axios = require('axios')
 
 module.exports = class FacebookLoginService extends AuthService {
   constructor(token) {
-    super()
-    this.token = token
-    this.socialData = {}    
-  }
-
-  async login() {
-    await this.fetchProfile()
-    await this.lookupUser({
-      $or: [{ google_id: this.socialData.sub }, { email: this.socialData.email }],
-    })
-    await this.registerNewUser()
-    await this.saveUser()
-    await this.generateUserPayload()
-
-    return this
+    super(token)    
   }
 
   async fetchProfile() {
@@ -28,33 +14,39 @@ module.exports = class FacebookLoginService extends AuthService {
     )
 
     if (data === undefined) {
-      throw new Error('Unable to get user data from Facebook')
+      throw new Error('Unable to get user data from Google')
     }
 
     this.socialData = data
   }
 
-  async registerNewUser() {
-    if (!User.notFound(this.user)) {
-      console.log('Found user')            
-      console.log(this.user.google_id)
-      if (this.user.google_id === undefined || this.user.google_id === null) {
-        this.user.google_id = this.socialData.sub
-      }
+  async lookupUserFromSocial() {
+    await this.lookupUser({
+      $or: [{ google_id: this.socialData.sub }, { email: this.socialData.email }],
+    })
 
+    if (this.user === undefined || User.notFound(this.user)) {
+      await this.populateFromSocialData()
       return this
     }
 
+    if (this.user.google_id === undefined || this.user.google_id === null) {
+      this.user.google_id = this.socialData.sub
+    }
+
+    return this
+  }  
+
+  async populateFromSocialData() {
     this.user = new User({
       email: this.socialData.email,
       name: this.socialData.name,
       password: this.socialData.sub,
       facebook_id: this.socialData.sub,
-      photo: {
-        url: this.socialData.picture
-      },
+      photo: this.socialData.picture,
       is_verified: true,
     })
+
     return this
   }
 }

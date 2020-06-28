@@ -1,5 +1,7 @@
 const jwt = require('jwt-simple')
 const faker = require('faker')
+const Artist = require('../../models/artist')
+const Contractor = require('../../models/artist')
 
 // in seconds - 30 days
 const tokenExpiration = 60 * 60 * 24 * 30
@@ -9,11 +11,22 @@ module.exports = class GenerateTokenService {
         return faker.random.alphaNumeric(size)
     }
 
-    static generateForUser(user) {        
-        return jwt.encode(this.getUserPayload(user), process.env.AUTH_SECRET)
+    static async generateForUser(user) {  
+        const payload = await this.getUserPayload(user)
+        return jwt.encode(payload, process.env.AUTH_SECRET)
     }
 
-    static getUserPayload(user) {     
+    static async getUserPayload(user) {
+        let photo = ''
+        if (user.role !== undefined) {            
+            const roleModel = user.role === 'artist' ? Artist : Contractor
+            const roleInstance = await roleModel.fetchOne({ user: user.id })
+    
+            if (roleInstance !== null) {
+                photo = roleInstance.media.photo
+            }
+        }
+
         const now = Math.floor(Date.now() / 1000)                
         const payload = {
             id:     user.id,
@@ -21,7 +34,7 @@ module.exports = class GenerateTokenService {
             email:  user.email,
             name:   user.name,            
             photo:  {
-                url: faker.image.avatar()
+                url: photo
             },
             iat:    now,            
             exp:    now + tokenExpiration 
