@@ -82,10 +82,19 @@ const role = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
-const oauth = (req, res, next) => {
-  req.data = { token: req.headers.authorization.replace('Bearer ', '')}
-  next()
+const social = (req, res, next) => {
+  const schema = validateRequest.object({
+    token: validateRequest.string().required()
+  })
+
+  console.log(req.body)
+  return validate(req.body, req, next, schema)
 }
+
+// const oauth = (req, res, next) => {
+//   req.data = { token: req.headers.authorization.replace('Bearer ', '')}
+//   next()
+// }
 
 const id = (req, res, next) => {
   const schema = validateRequest.object({
@@ -111,4 +120,16 @@ const product = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
-module.exports = { id, token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth, profile, role, product }
+module.exports = { 
+  id,
+  token,
+  social,
+  newCrendentials, 
+  credentials, 
+  verify, 
+  forgotPassword, 
+  resetPassword, 
+  profile, 
+  role, 
+  product
+ }

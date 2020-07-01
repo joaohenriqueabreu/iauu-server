@@ -1,8 +1,8 @@
-const AuthService = require('./auth')
+const SocialLoginService = require('./socialLogin')
 const User = require('../../models/user')
 const axios = require('axios')
 
-module.exports = class FacebookLoginService extends AuthService {
+module.exports = class GoogleLoginService extends SocialLoginService {
   constructor(token) {
     super(token)    
   }

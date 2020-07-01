@@ -33,7 +33,6 @@ module.exports = class ArtistService extends BaseService
 
     async saveArtist() {      
       if (this.artist.isModified) {
-        console.log(this.artist)
         await this.artist.save()
         console.log('Artist saved...')
       }

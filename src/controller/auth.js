@@ -8,6 +8,7 @@ const ResetPasswordService = require('../services/auth/resetPassword')
 const FacebookLoginService = require('../services/auth/facebookLogin')
 const GoogleLoginService = require('../services/auth/googleLogin')
 const AssignRoleService = require('../services/auth/assignRole')
+const GenerateTokenService = require('../services/auth/generateToken')
 
 class AuthController extends BaseController {
   register(req, res, next) {
@@ -39,11 +40,11 @@ class AuthController extends BaseController {
 
   facebookLogin(req, res, next) {
     console.log('Facebook Login...')
-    const { token } = req.data    
+    const { token } = req.data
     const facebookLoginService = new FacebookLoginService(token)
 
     facebookLoginService.login()
-        .then(() => res.status(200).json(facebookLoginService.geToken()))
+        .then(() => res.status(200).json(facebookLoginService.user.access_token))
         .catch((error) => next(error))
   }
 

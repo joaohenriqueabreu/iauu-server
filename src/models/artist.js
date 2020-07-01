@@ -19,6 +19,7 @@ const artistSchema = new Schema({
   phone: { type: String },
   story: { type: String },
   media: {
+    bg: { type: String },
     presentations: [String]
   },
   category: {

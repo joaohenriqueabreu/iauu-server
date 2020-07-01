@@ -11,7 +11,7 @@ const userSchema = new Schema({
   role: { type: String, enum: ['artist', 'contractor', 'admin'] },
   name: { type: String, required: true },  
   access_token: { type: String, required: true, select: false },
-  media: userMediaSchema,
+  photo: { type: String },
   first_name: { type: String },
   last_name: { type: String },
   accept_terms: { type: Boolean },  

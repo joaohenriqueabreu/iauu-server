@@ -43,13 +43,13 @@ module.exports = class SaveArtistProfileService extends ArtistService
           delete this.data[prop]
         }
       }
-      
+
       return this
     }
 
     populateModel() {
       for (let prop in this.data) {
-        this.artist[prop] = this.data[prop]
+        this.artist[prop] = this.data[prop]        
       }
             
       console.log('Artist ready to save...')      
@@ -59,7 +59,7 @@ module.exports = class SaveArtistProfileService extends ArtistService
     async updateUser() {
       // Check if we need to save something
       console.log('Checking if user needs saving...')
-      if (this.artist.user.media === this.userData.media) { 
+      if (this.artist.user.photo === this.userData.photo) { 
         return
       }
       console.log('User needs saving...')

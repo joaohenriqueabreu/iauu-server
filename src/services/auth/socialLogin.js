@@ -5,14 +5,14 @@ module.exports = class SocialLogin extends AuthService {
   constructor(token) {
     super()
     this.token = token
-    this.socialData = {}    
+    this.socialData = {}
   }
 
   async login() {
     await this.fetchProfile()
-    await this.lookupUserFromSocial()        
-    await this.saveUser()
+    await this.lookupUserFromSocial()
     await this.generateAccessToken()
+    await this.saveUser()
     return this
   }  
 }

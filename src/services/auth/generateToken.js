@@ -26,8 +26,8 @@ module.exports = class GenerateTokenService {
             // Role must be an arrah for frontend $auth handle access scope
             role:   [user.role],
             email:  user.email,
-            name:   user.name,            
-            photo:  user.media.photo,
+            name:   user.name,
+            photo:  user.photo,
             role_id: user.getRoleId(),
             requires_initial_setup: this.needsSetup(user),
             iat:    now,            

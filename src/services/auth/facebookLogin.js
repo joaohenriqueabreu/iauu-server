@@ -4,7 +4,7 @@ const axios = require('axios')
 
 module.exports = class FacebookLoginService extends SocialLoginService {
   constructor(token) {
-    super(token)        
+    super(token)
   }
 
   async fetchProfile() {    
@@ -42,7 +42,7 @@ module.exports = class FacebookLoginService extends SocialLoginService {
       name: this.socialData.name,
       password: this.socialData.id, // writing a "fake" pwd that will not be encrypted, but is required for saving
       facebook_id: this.socialData.id,
-      photo: this.socialData.picture,
+      photo: this.socialData.picture.data.url,
       is_verified: true,
     })
 

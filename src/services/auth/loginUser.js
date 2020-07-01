@@ -15,7 +15,6 @@ module.exports = class AuthenticateUserService extends AuthService
       await this.validateLogin()
       await this.generateAccessToken()
       await this.saveUser()
-
       return this
     }
 
