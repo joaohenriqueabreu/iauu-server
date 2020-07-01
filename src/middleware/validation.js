@@ -1,5 +1,6 @@
 const validateRequest = require('@hapi/joi')
 const { ValidationError } = require('@hapi/joi')
+const BadRequestException = require('../exception/bad')
 
 const validate = (data, req, next, schema) => {
   console.log('Validating Request...')
@@ -11,7 +12,7 @@ const validate = (data, req, next, schema) => {
 
   const { error, value } = schema.validate(data, options)
   if (error) {
-    next(`Validation error: ${error.details.map((x) => x.message).join(', ')}`)
+    next(new BadRequestException(`Validation error: ${error.details.map((x) => x.message).join(', ')}`))    
   }
 
   console.log('Request Validated...')
@@ -86,6 +87,14 @@ const oauth = (req, res, next) => {
   next()
 }
 
+const id = (req, res, next) => {
+  const schema = validateRequest.object({
+    id: validateRequest.string().required()    
+  })
+
+  return validate(req.params, req, next, schema)
+}
+
 const profile = (req, res, next) => {
   const schema = validateRequest.object({
     profile: validateRequest.object().required()
@@ -94,4 +103,12 @@ const profile = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
-module.exports = { token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth, profile, role }
+const product = (req, res, next) => {
+  const schema = validateRequest.object({
+    product: validateRequest.object().required()
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
+module.exports = { id, token, newCrendentials, credentials, verify, forgotPassword, resetPassword, oauth, profile, role, product }

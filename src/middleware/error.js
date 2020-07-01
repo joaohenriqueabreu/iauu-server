@@ -1,19 +1,12 @@
-module.exports = (err, req, res, next) => {  
+const Exception = require('../exception/exception')
+
+module.exports = (error, req, res, next) => {  
     console.log('Something is wrong...')
-    console.log(err)
-    switch (true) {        
-        case typeof err === 'string':
-            // custom application error
-            const is404 = err.toLowerCase().endsWith('not found');
-            const statusCode = is404 ? 404 : 400;
-            return res.status(statusCode).json({ message: err });
-        case err.name === 'ValidationError':
-            // mongoose validation error
-            return res.status(400).json({ message: err.message });
-        case err.name === 'UnauthorizedError':
-            // jwt authentication error
-            return res.status(401).json({ message: 'Invalid Token' });
-        default:
-            return res.status(500).json({ message: err.message, stack: err.stack });
+    console.log(error)
+
+    if (error instanceof Exception) {
+        return res.status(error.code).json(error.message)
     }
+
+    return res.status(500).json(error)
 }

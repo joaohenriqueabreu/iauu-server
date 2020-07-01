@@ -2,7 +2,7 @@
 
 const BaseController = require('./base')
 const RegisterUserService = require('../services/auth/registerUser')
-const AuthenticateUserService = require('../services/auth/authenticateUser')
+const LoginUserService = require('../services/auth/loginUser')
 const VerifyUserService = require('../services/auth/verifyUser')
 const ResetPasswordService = require('../services/auth/resetPassword')
 const FacebookLoginService = require('../services/auth/facebookLogin')
@@ -30,10 +30,10 @@ class AuthController extends BaseController {
 
   login(req, res, next) {
     const { email, password } = req.data
-    const authenticateUserService = new AuthenticateUserService(email, password)
+    const loginUserService = new LoginUserService(email, password)
 
-    authenticateUserService.login()
-      .then(() => res.status(200).json(authenticateUserService.getToken()))
+    loginUserService.login()
+      .then(() => res.status(200).json(loginUserService.getToken()))
       .catch((error) => next(error))
   }
 

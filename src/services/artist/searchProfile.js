@@ -1,7 +1,7 @@
 const Artist = require('../../models/artist')
 const ArtistService = require('./base')
 
-module.exports = class SearchProfileService extends ArtistService
+module.exports = class SearchArtistProfileService extends ArtistService
 {
     constructor(id) {
       super()
@@ -15,8 +15,8 @@ module.exports = class SearchProfileService extends ArtistService
 
     async lookupArtist() {
       console.log('Searching for artist with...')      
-      this.artist = await await Artist.fetchOneWith({ user: this.id }, ['user'])
-      console.log(this.artist)      
+      this.artist = await Artist.findOne({ user: this.id })
+        .populate('user')      
       console.log('Found artist...')
       return this
     }

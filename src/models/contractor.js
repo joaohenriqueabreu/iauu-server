@@ -2,7 +2,7 @@ require('dotenv').config()
 const db = require('../data/db')
 const BaseModel = require('./base')
 
-const address = require('./address')
+const address = require('./schemas/address')
 
 const { Schema } = db
 

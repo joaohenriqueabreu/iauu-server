@@ -1,13 +1,12 @@
 const db = require('../data/db')
 const { forEach } = require('../seeds/social')
-const user = require('./user')
 
 module.exports = class BaseModel {
   constructor(schema) {
     if (this.constructor === BaseModel) { throw new TypeError('Cannot construct abstract class') }        
   }
 
-  static async fetchById(id) {    
+  static async fetchById(id, refs) {    
     const { error, model } = await this.findById({id})
     return this.handleQuery(error, model)
   } 
@@ -16,16 +15,12 @@ module.exports = class BaseModel {
     return this.find(condition, this.handleQuery)
   }
 
-  static async fetchOne(condition) {
-    return this.findOne(condition, this.handleQuery)
-  }
-
-  static async fetchOneWith(condition, refs) {
-    const result = this.findOne(condition).select()
+  static async fetchOne(condition, refs) {
+    const result = this.findOne(condition)
     refs.forEach(ref => {
       result.populate(ref)
     })
-
+    
     return result
   }
 

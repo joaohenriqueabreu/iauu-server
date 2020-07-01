@@ -1,9 +1,8 @@
 const jwt = require('jwt-simple')
 const faker = require('faker')
-const Artist = require('../../models/artist')
-const Contractor = require('../../models/artist')
+const { User, Artist, Contractor } = require('../../models')
 
-// in seconds - 30 days
+// 30 days (in seconds)
 const tokenExpiration = 60 * 60 * 24 * 30
 
 module.exports = class GenerateTokenService {
@@ -16,30 +15,33 @@ module.exports = class GenerateTokenService {
         return jwt.encode(payload, process.env.AUTH_SECRET)
     }
 
-    static async getUserPayload(user) {
-        let photo = ''
-        if (user.role !== undefined) {            
-            const roleModel = user.role === 'artist' ? Artist : Contractor
-            const roleInstance = await roleModel.fetchOne({ user: user.id })
-    
-            if (roleInstance !== null) {
-                photo = roleInstance.media.photo
-            }
+    static async getUserPayload(user) {        
+        if (! user instanceof User) {
+             throw new Error('Invalid user')
         }
 
         const now = Math.floor(Date.now() / 1000)                
         const payload = {
             id:     user.id,
-            role:   [user.role], // Role must be an array for frontend $auth handle access scope
+            // Role must be an arrah for frontend $auth handle access scope
+            role:   [user.role],
             email:  user.email,
             name:   user.name,            
-            photo:  {
-                url: photo
-            },
+            photo:  user.media.photo,
+            role_id: user.getRoleId(),
+            requires_initial_setup: this.needsSetup(user),
             iat:    now,            
             exp:    now + tokenExpiration 
         }
         
         return payload
-    }    
+    }
+
+    static needsSetup(user) {
+        if (user.role === 'artist' && user.artist instanceof Artist) {
+            return user.artist.products === undefined || user.artist.products.length === 0
+        }
+
+        return false
+    }
 }

@@ -1,8 +1,10 @@
 'use strict'
 
 const BaseController = require('./base')
-const SearchProfileService = require('../services/artist/searchProfile')
-const ArtistProfileService = require('../services/artist/artistProfile')
+const SearchArtistProfileService = require('../services/artist/searchProfile')
+const SaveArtistProfileService = require('../services/artist/saveProfile')
+const SaveProductService = require('../services/artist/saveProduct')
+const LookupProductsService = require('../services/artist/lookupProducts')
 
 const faker = require('faker')
 const { Artist, Product } = require('../seeds')
@@ -45,18 +47,34 @@ class ArtistController extends BaseController {
   profile(req, res, next) {
     console.log("Requesting artist...")    
 
-    const searchProfileSvc = new SearchProfileService(req.user.id)
-    searchProfileSvc
-      .search()
-      .then(() => { res.status(200).json(searchProfileSvc.getArtist()) })
+    const searchProfileService = new SearchArtistProfileService(req.user.id)
+    searchProfileService.search()
+      .then(() => { res.status(200).json(searchProfileService.getArtist()) })
       .catch((error) => next(error))    
   }
 
   updateProfile(req, res, next) {
-    console.log("Updating profile...")       
-    const artistProfileSvc = new ArtistProfileService(req.data)
-      .save()
-      .then(() => { res.status(200).json({}) })
+    console.log("Updating profile...")
+    const saveProfileService = new SaveArtistProfileService(req.data)
+    saveProfileService.save()
+      .then(() => { res.status(200).json(saveProfileService.getArtist()) })
+      .catch((error) => next(error))
+  }
+
+  products(req, res, next) {
+    console.log("Looking up products...")    
+    const lookupProductsService = new LookupProductsService(req.data && req.data.id ? req.data.id : req.user.id)
+    lookupProductsService.lookup()
+      .then(() => { res.status(200).json(lookupProductsService.getProducts()) })
+      .catch((error) => next(error))
+    
+  }
+
+  saveProduct(req, res, next) {
+    console.log('Starting to save product...')
+    const saveProductService = new SaveProductService(req.user, req.data)
+    saveProductService.save()
+      .then(() => { res.status(200).json(saveProductService.getProducts()) })
       .catch((error) => next(error))
   }
 

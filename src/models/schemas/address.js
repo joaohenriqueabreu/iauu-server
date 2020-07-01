@@ -1,4 +1,4 @@
-const db = require('../data/db')
+const db = require('../../data/db')
 const coordinates = require('./coordinates')
 
 module.exports = new db.Schema({    

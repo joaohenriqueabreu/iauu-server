@@ -1,5 +1,6 @@
 const AuthService   = require('./auth');
 const User          = require('../../models/user')
+const UnauthorizedException = require('../../exception/unauthorized')
 
 module.exports = class AuthenticateUserService extends AuthService
 {
@@ -20,11 +21,11 @@ module.exports = class AuthenticateUserService extends AuthService
 
     async validateLogin() {
       if (User.notFound(this.user)) {
-        throw new Error('Invalid credentials provided')
+        throw new UnauthorizedException('Invalid credentials provided')
       }
 
       if (! await this.validatePassword(this.password)) {
-        throw new Error('Invalid credentials provided')
+        throw new UnauthorizedException('Invalid credentials provided')
       }
 
       return this

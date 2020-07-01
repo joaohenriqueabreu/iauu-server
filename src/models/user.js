@@ -1,6 +1,7 @@
 require('dotenv').config()
 const db = require('../data/db')
 const BaseModel = require('./base')
+const userMediaSchema = require('./schemas/userMedia')
 
 const { Schema } = db
 
@@ -8,13 +9,12 @@ const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true, select: false },
   role: { type: String, enum: ['artist', 'contractor', 'admin'] },
-  name: { type: String, required: true },
+  name: { type: String, required: true },  
   access_token: { type: String, required: true, select: false },
-  title: { type: String },
+  media: userMediaSchema,
   first_name: { type: String },
   last_name: { type: String },
-  accept_terms: { type: Boolean },
-  role: { type: String },
+  accept_terms: { type: Boolean },  
   verification_token: { type: String, select: false },
   is_verified: { type: Boolean, default: false },
   reset_token: { type: String, select: false },
@@ -35,18 +35,24 @@ const userSchema = new Schema({
 
 class User extends BaseModel {
   constructor() {
-    super()
+    super()    
   }
 
   static findFromCredentials({ email, password }) {
     return this.findOne({ email, password })
   }
 
+  static fetchdById(id) {
+    return this.findById(id)      
+      .populate('artist')
+      .populate('contractor')      
+  }
+
   static fetchWithSensitiveDataById(id) {
     return this.findById(id)
       .select('+password +access_token +verification_token')
       .populate('artist')
-      .populate('contractor')      
+      .populate('contractor')
   }
 
   static fetchWithSensitiveData(conditions) {    
@@ -62,6 +68,20 @@ class User extends BaseModel {
 
   generateResetPasswordUrl() {
     return `${process.env.WEB_URL}/reset/password/${this.verification_token}`
+  }
+
+  getRoleId() {
+    console.log('Getting role id...')
+    if (this.role === 'artist') {      
+      console.log(this.artist.id)
+      return this.artist.id
+    }
+
+    if (this.role === 'contractor') {
+      return this.contractor.id
+    }
+
+    return null
   }
 }
 

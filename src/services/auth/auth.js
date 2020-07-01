@@ -26,7 +26,6 @@ module.exports = class AuthService extends BaseService {
     }
 
     console.log('User found...')
-
     return this
   }
 
