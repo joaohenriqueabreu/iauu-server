@@ -120,6 +120,11 @@ const product = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const search = (req, res, next) => {  
+  const schema = validateRequest.object({})
+  return validate(req.query, req, next, schema)
+}
+
 module.exports = { 
   id,
   token,
@@ -131,5 +136,6 @@ module.exports = {
   resetPassword, 
   profile, 
   role, 
-  product
+  product,
+  search
  }

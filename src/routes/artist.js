@@ -5,18 +5,16 @@ const artistController = require('../controller/artist')
 const authorizationMiddleware = require('../middleware/authorization')
 const validationMiddleware = require('../middleware/validation')
 
-api.get('/categories', artistController.categories)
-api.get('/categories/:id/subcategories', artistController.subcategories)
-api.get('/artists/:id/public', artistController.publicInfo)
-api.get('/artists/:id/private', authorizationMiddleware.authorize, artistController.privateInfo)
+api.get('/:id/public', artistController.publicInfo)
+api.get('/:id/private', authorizationMiddleware.authorize, artistController.privateInfo)
 
-api.get('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.profile)
-api.put('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.profile, artistController.updateProfile)
+api.get('/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.profile)
+api.put('/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.profile, artistController.updateProfile)
 
-api.get('/artists/products', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.products)
-api.get('/artists/:id/products', validationMiddleware.id, authorizationMiddleware.authorize, artistController.products)
-api.post('/artists/products', validationMiddleware.product, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.saveProduct)
-api.delete('/artists/products/:id', validationMiddleware.id, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.deleteProduct)
+api.get('/products', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.products)
+api.get('/:id/products', validationMiddleware.id, authorizationMiddleware.authorize, artistController.products)
+api.post('/products', validationMiddleware.product, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.saveProduct)
+api.delete('/products/:id', validationMiddleware.id, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.deleteProduct)
 
 module.exports = api
 

@@ -9,7 +9,6 @@ const LookupProductsService = require('../services/artist/lookupProducts')
 
 const faker = require('faker')
 const { Artist, Product } = require('../seeds')
-const { ReplSet } = require('mongodb')
 
 class ArtistController extends BaseController {
   publicInfo(req, res, next) {
@@ -80,8 +79,7 @@ class ArtistController extends BaseController {
       .catch((error) => next(error))
   }
 
-  deleteProduct(req, res, next) {
-    console.log(req.data)
+  deleteProduct(req, res, next) {    
     const deleteProductService = new DeleteProductService(req.user, req.data)
     deleteProductService.delete()
       .then(() => { res.status(200).json(deleteProductService.getProducts()) })

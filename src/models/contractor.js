@@ -12,14 +12,6 @@ const contractorSchema = new Schema({
     ref: 'User'
   },
 
-  company_name: { type: String, required: true },
-  story: { type: String },
-  media: {
-    bg: { type: String },
-    photo: { type: String },
-    presentations: [String]
-  },
-  social: [String],
   address: {type: address}
   
 })
