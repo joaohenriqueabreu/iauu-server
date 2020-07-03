@@ -13,9 +13,10 @@ api.get('/artists/:id/private', authorizationMiddleware.authorize, artistControl
 api.get('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.profile)
 api.put('/artists/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.profile, artistController.updateProfile)
 
-api.get('/artist/products', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.products)
-api.get('/artist/:id/products', validationMiddleware.id, authorizationMiddleware.authorize, artistController.products)
-api.post('/artist/products', validationMiddleware.product, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.saveProduct)
+api.get('/artists/products', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.products)
+api.get('/artists/:id/products', validationMiddleware.id, authorizationMiddleware.authorize, artistController.products)
+api.post('/artists/products', validationMiddleware.product, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.saveProduct)
+api.delete('/artists/products/:id', validationMiddleware.id, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.deleteProduct)
 
 module.exports = api
 

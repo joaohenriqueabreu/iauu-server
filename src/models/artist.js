@@ -5,6 +5,8 @@ const BaseModel = require('./base')
 const addressSchema = require('./schemas/address')
 const socialSchema = require('./schemas/media')
 const productsSchema = require('./schemas/product')
+const productItemsSchema = require('./schemas/productItem')
+const productItemSelectionSchema = require('./schemas/productItemSelection')
 
 const { Schema } = db
 
@@ -26,7 +28,9 @@ const artistSchema = new Schema({
     name: { type: String },
     subcategories: [String]
   },
+
   products: [productsSchema],
+
   tags: [String],
   social: [socialSchema],
   address: addressSchema

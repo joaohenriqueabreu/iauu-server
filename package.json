@@ -9,7 +9,8 @@
         "server": "node src/app",
         "start": "node src/app",
         "dev": "nodemon -L src/app.js",
-        "stop": "pkill --signal SIGINT reforma.ai.server"
+        "stop": "pkill --signal SIGINT reforma.ai.server",
+        "migrate": "./node_modules/.bin/migrate -c src"
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",
@@ -26,7 +27,9 @@
         "helmet": "^3.22.0",
         "jsonwebtoken": "^8.5.1",
         "jwt-simple": "^0.5.6",
+        "lodash": "^4.17.15",
         "memcached": "^2.2.2",
+        "migrate-mongoose": "^4.0.0",
         "moment": "^2.24.0",
         "mongodb": "^3.5.8",
         "mongoose": "^5.9.18",

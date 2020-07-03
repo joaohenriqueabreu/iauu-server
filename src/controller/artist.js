@@ -4,10 +4,12 @@ const BaseController = require('./base')
 const SearchArtistProfileService = require('../services/artist/searchProfile')
 const SaveArtistProfileService = require('../services/artist/saveProfile')
 const SaveProductService = require('../services/artist/saveProduct')
+const DeleteProductService = require('../services/artist/deleteProduct')
 const LookupProductsService = require('../services/artist/lookupProducts')
 
 const faker = require('faker')
 const { Artist, Product } = require('../seeds')
+const { ReplSet } = require('mongodb')
 
 class ArtistController extends BaseController {
   publicInfo(req, res, next) {
@@ -75,6 +77,14 @@ class ArtistController extends BaseController {
     const saveProductService = new SaveProductService(req.user, req.data)
     saveProductService.save()
       .then(() => { res.status(200).json(saveProductService.getProducts()) })
+      .catch((error) => next(error))
+  }
+
+  deleteProduct(req, res, next) {
+    console.log(req.data)
+    const deleteProductService = new DeleteProductService(req.user, req.data)
+    deleteProductService.delete()
+      .then(() => { res.status(200).json(deleteProductService.getProducts()) })
       .catch((error) => next(error))
   }
 
