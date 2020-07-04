@@ -1,22 +1,33 @@
 require('dotenv').config()
 const db = require('../data/db')
 const BaseModel = require('./base')
+const baseSchemaOptions = require('./schemas/options')
+const { v4: uid } = require('uuid');
 
 const addressSchema = require('./schemas/address')
 const socialSchema = require('./schemas/media')
 const productsSchema = require('./schemas/product')
-const productItemsSchema = require('./schemas/productItem')
-const productItemSelectionSchema = require('./schemas/productItemSelection')
+const timeslotSchema = require('./schemas/timeslot')
 
 const { Schema } = db
 
-const artistSchema = new Schema({
-  user :{
-    type: db.Schema.Types.ObjectId,
+const slugfy = function (slug) {
+  return this.company_name !== undefined 
+    ? this.company_name.toLowerCase().replace(' ', '-')
+    : this.user.name.toLowerCase().replace(' ', '-')
+}
+
+const artistSchema = new Schema({  
+  user : {
+    type: Schema.Types.ObjectId,
     ref: 'User'
   },
 
   company_name: { type: String },
+  slug: { 
+    type: String,
+    default: uid()
+  },
   document: { type: String },
   phone: { type: String },
   story: { type: String },
@@ -30,11 +41,12 @@ const artistSchema = new Schema({
   },
 
   products: [productsSchema],
+  schedule: [timeslotSchema],
 
   tags: [String],
   social: [socialSchema],
   address: addressSchema
-})
+}, { ...baseSchemaOptions })
 
 class Artist extends BaseModel {
   constructor() {

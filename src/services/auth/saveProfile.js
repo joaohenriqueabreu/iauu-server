@@ -31,7 +31,7 @@ module.exports = class SaveUserProfileService extends AuthService
     populateModel() {
       for (let prop in this.data) {
         this.user[prop] = this.data[prop]
-      }
+      }      
             
       console.log('User ready to save...')
       return this

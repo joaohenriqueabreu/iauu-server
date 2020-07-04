@@ -8,7 +8,10 @@ class ContractorController extends BaseController {
     console.log('Searching for artists...')
     const searchArtistsService = new SearchArtistsService(req.data)
     searchArtistsService.search()
-      .then(() => { res.status(200).json(searchArtistsService.getArtists()) })
+      .then(() => { 
+        console.log(searchArtistsService.getArtists())
+        res.status(200).json(searchArtistsService.getArtists()) 
+      })
       .catch((error) => next(error))
   }
 }

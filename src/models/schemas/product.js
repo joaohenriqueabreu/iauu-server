@@ -1,6 +1,6 @@
 const db = require('../../data/db')
 const mediaSchema = require('./media')
-// const itemSchema = require('./productItem')
+const baseSchemaOptions = require('../schemas/options')
 
 const productSchema = new db.Schema({
     name: { type: String },
@@ -10,7 +10,7 @@ const productSchema = new db.Schema({
     duration: { type: Number },
     medias: [mediaSchema],
     items: [String]
-})
+}, baseSchemaOptions)
 
 productSchema.index({ name: 'text', description: 'text', items: 'text' })
 module.exports = productSchema

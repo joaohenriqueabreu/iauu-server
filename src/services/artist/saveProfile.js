@@ -1,14 +1,22 @@
 const Artist = require('../../models/artist')
 const ArtistService = require('./base')
 const SaveUserProfileService = require('../auth/saveProfile')
+const BadRequestException = require('../../exception/bad')
+
+const slugfy = (value) => {
+  return value.toLowerCase().replace(' ', '-')
+}
 
 module.exports = class SaveArtistProfileService extends ArtistService
 {
-    constructor({ profile }) {
-      super()
-      const { _id } = profile
-      this.id = _id
-      this.data = profile
+    constructor(user, data) {
+      super(user)
+
+      if (data === undefined) {
+        throw new BadRequestException('Data is required')
+      }
+
+      this.data = data.profile
       this.userData = {}
     }
 
@@ -16,6 +24,7 @@ module.exports = class SaveArtistProfileService extends ArtistService
       await this.lookupArtist()
       await this.ensureArtistWasFound()
       await this.sanitizeData()
+      await this.populateSlug(0)
       await this.populateModel()
       await this.saveArtist()
       await this.updateUser()
@@ -37,6 +46,7 @@ module.exports = class SaveArtistProfileService extends ArtistService
       delete this.data['user']
       delete this.data['_id']
       delete this.data['__v']
+      delete this.data['slug']
 
       for (let prop in this.data) {
         if (this.data[prop] === undefined || this.data[prop] === this.artist[prop]) {
@@ -47,11 +57,36 @@ module.exports = class SaveArtistProfileService extends ArtistService
       return this
     }
 
+    async populateSlug(suffix) {
+      if (this.data['company_name'] === undefined ||
+        this.data['company_name'] === this.artist.company_name) {
+        console.log('No name changes...')
+        return this
+      }
+
+      let slug = slugfy(this.data['company_name'])
+
+      // Assign suffix if any
+      if (suffix > 0) {
+        slug = `${slug}-${suffix}`
+      }
+
+      console.log(`Checking if slug ${slug} exists...`)
+      // Verify if slug exists
+      if (await Artist.exists({ slug })) {
+        console.log('Found existing slug...')
+        return this.populateSlug(++suffix)
+      }
+
+      this.artist.slug = slug
+      return this
+    }
+
     populateModel() {
       for (let prop in this.data) {
         this.artist[prop] = this.data[prop]        
-      }
-            
+      }      
+
       console.log('Artist ready to save...')      
       return this
     }
@@ -65,6 +100,6 @@ module.exports = class SaveArtistProfileService extends ArtistService
       console.log('User needs saving...')
       const saveUserProfileService = new SaveUserProfileService(this.artist.user, this.userData)
       await saveUserProfileService.save()
-      return this      
+      return this
     }
 }

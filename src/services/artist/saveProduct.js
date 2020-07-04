@@ -1,12 +1,17 @@
 const _ = require('lodash')
 const ArtistService = require('./base')
+const BadRequestException = require('../../exception/bad')
 
 module.exports = class SaveProductService extends ArtistService
 {
-    constructor({ role_id }, { product }) {
-      super()
-      this.id = role_id
-      this.product = product
+    constructor(user, data) {
+      super(user)
+
+      if (data === undefined) {
+        throw new BadRequestException('Data is required')
+      }
+
+      this.product = data.product
     }
 
     async save() {
@@ -20,7 +25,8 @@ module.exports = class SaveProductService extends ArtistService
     populateModel() {
       console.log('Checking if product exists...')
       const self = this
-      const index = _.findIndex(this.artist.products, (product) => product.id === self.product._id)
+      console.log(self.product)
+      const index = _.findIndex(this.artist.products, (product) => product.id === self.product.id)
 
       if (index > -1) {
         this.artist.products[index] = this.product

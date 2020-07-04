@@ -1,7 +1,7 @@
 require('dotenv').config()
 const db = require('../data/db')
 const BaseModel = require('./base')
-const userMediaSchema = require('./schemas/userMedia')
+const baseSchemaOptions = require('./schemas/options')
 
 const { Schema } = db
 
@@ -31,7 +31,7 @@ const userSchema = new Schema({
   },
   date_created: { type: Date, default: Date.now },
   date_updated: { type: Date },
-})
+}, { ...baseSchemaOptions })
 
 class User extends BaseModel {
   constructor() {
@@ -72,8 +72,7 @@ class User extends BaseModel {
 
   getRoleId() {
     console.log('Getting role id...')
-    if (this.role === 'artist') {      
-      console.log(this.artist.id)
+    if (this.role === 'artist') {
       return this.artist.id
     }
 

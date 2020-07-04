@@ -3,9 +3,14 @@ const BaseService = require('../base')
 
 module.exports = class SearchArtistProfileService extends BaseService
 {
-    constructor({ term }) {
-      super()
-      this.term = term
+    constructor(user, data) {
+      super(user)
+
+      if (data !== undefined) {
+        // we can search without term
+        this.term = data.term
+      }
+
       this.artists = []
     }
 

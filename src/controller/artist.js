@@ -1,6 +1,8 @@
 'use strict'
 
 const BaseController = require('./base')
+const PublicArtistProfileService = require('../services/artist/publicSearch')
+const SearchArtistForProposalService = require('../services/artist/searchArtistForProposal')
 const SearchArtistProfileService = require('../services/artist/searchProfile')
 const SaveArtistProfileService = require('../services/artist/saveProfile')
 const SaveProductService = require('../services/artist/saveProduct')
@@ -11,44 +13,27 @@ const faker = require('faker')
 const { Artist, Product } = require('../seeds')
 
 class ArtistController extends BaseController {
-  publicInfo(req, res, next) {
-    console.log("Requisting artists")
-    console.log(req.params.id)
+  publicInfo(req, res, next) {    
+    console.log("Requesting artist public...")
 
-    // Checking if we are receiving a bearer token
-    console.log(req.headers)
-
-    let artist = new Artist(true)
-
-    artist.products = []
-    for (let i =0; i < faker.random.number(4)+ 1; i++) {
-        artist.products.push(new Product())
-    }
-
-    res.status(200).json(artist)
+    const publicArtistProfileService = new PublicArtistProfileService(req.user, req.data)
+    publicArtistProfileService.search(req.user, req.data)
+      .then(() => { res.status(200).json(publicArtistProfileService.getArtist()) })
+      .catch((error) => next(error))
   }
 
-  privateInfo(req, res, next) {
-    console.log("Requisting artists")
-    console.log(req.params.id)
+  privateInfo(req, res, next) {    
+    console.log("Requesting artist private...")
 
-    // Checking if we are receiving a bearer token
-    console.log(req.headers)
-
-    let artist = new Artist(true)
-
-    artist.products = []
-    for (let i =0; i < faker.random.number(4)+ 1; i++) {
-        artist.products.push(new Product())
-    }
-
-    res.status(200).json(artist)
+    const searchArtistForProposalService = new SearchArtistForProposalService(req.user, req.data)
+    searchArtistForProposalService.search(req.user, req.data)
+      .then(() => { res.status(200).json(searchArtistForProposalService.getArtist()) })
+      .catch((error) => next(error))
   }
 
   profile(req, res, next) {
-    console.log("Requesting artist...")    
-
-    const searchProfileService = new SearchArtistProfileService(req.user.id)
+    console.log("Requesting artist...")
+    const searchProfileService = new SearchArtistProfileService(req.user, req.data)
     searchProfileService.search()
       .then(() => { res.status(200).json(searchProfileService.getArtist()) })
       .catch((error) => next(error))    
@@ -56,7 +41,7 @@ class ArtistController extends BaseController {
 
   updateProfile(req, res, next) {
     console.log("Updating profile...")
-    const saveProfileService = new SaveArtistProfileService(req.data)
+    const saveProfileService = new SaveArtistProfileService(req.user, req.data)
     saveProfileService.save()
       .then(() => { res.status(200).json(saveProfileService.getArtist()) })
       .catch((error) => next(error))
@@ -64,7 +49,7 @@ class ArtistController extends BaseController {
 
   products(req, res, next) {
     console.log("Looking up products...")    
-    const lookupProductsService = new LookupProductsService(req.data && req.data.id ? req.data.id : req.user.id)
+    const lookupProductsService = new LookupProductsService(req.user, req.data)
     lookupProductsService.lookup()
       .then(() => { res.status(200).json(lookupProductsService.getProducts()) })
       .catch((error) => next(error))
@@ -84,26 +69,6 @@ class ArtistController extends BaseController {
     deleteProductService.delete()
       .then(() => { res.status(200).json(deleteProductService.getProducts()) })
       .catch((error) => next(error))
-  }
-
-  categories(req, res, next) {
-    res.status(200).json([
-        {id: faker.random.number(100), name: 'banda'}, 
-        {id: faker.random.number(100), name: 'DJ'}, 
-        {id: faker.random.number(100), name: 'teatro'}, 
-        {id: faker.random.number(100), name: 'circo'}, 
-        {id: faker.random.number(100), name: 'standup'}, 
-        {id: faker.random.number(100), name: 'outros'}, 
-    ])
-  }
-
-  subcategories(req, res) {
-    let subcategories = []
-    for(let i=0;i<faker.random.number(10); i++) {
-        subcategories.push({id: faker.random.number(1000), name: faker.commerce.product()})
-    }
-  
-    res.status(200).json(subcategories)
   }
 }
 

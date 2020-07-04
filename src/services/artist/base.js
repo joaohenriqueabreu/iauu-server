@@ -3,8 +3,10 @@ const BaseService = require('../base')
 
 module.exports = class ArtistService extends BaseService
 {
-    constructor() {
-      super()      
+    constructor({ id, role_id }) {
+      super()
+      this.id = role_id
+      this.userId = id      
       this.artist = {}
     }
 
@@ -16,8 +18,14 @@ module.exports = class ArtistService extends BaseService
       return this.artist.products
     }
 
+    async lookupMe() {
+      console.log('Searching for artist from user...')
+      this.artist = await Artist.findOne({ user: this.userId }).populate('user')
+      return this
+    }
+
     async lookupArtist() {
-      console.log('Searching for artist...')
+      console.log('Searching for artist...')      
       this.artist = await Artist.findById(this.id).populate('user')
       return this
     }

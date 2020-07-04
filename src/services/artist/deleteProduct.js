@@ -4,14 +4,18 @@ const BadRequestException = require('../../exception/bad')
 
 module.exports = class SaveProductService extends ArtistService
 {
-    constructor({ role_id }, { id }) {
-      super()
-      this.id = role_id
-      this.productId = id
+    constructor(user, data) {
+      super(user)
+
+      if (data === undefined) {
+        throw new BadRequestException('Data is required')
+      }
+
+      this.productId = data.id
     }
 
     async delete() {
-      await this.lookupArtist()
+      await this.lookupMe()
       await this.ensureArtistWasFound()
       await this.ensureProductExists()
       await this.deleteProduct()

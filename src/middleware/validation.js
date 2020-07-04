@@ -104,6 +104,14 @@ const id = (req, res, next) => {
   return validate(req.params, req, next, schema)
 }
 
+const slug = (req, res, next) => {
+  const schema = validateRequest.object({
+    slug: validateRequest.string().required()    
+  })
+
+  return validate(req.params, req, next, schema)
+}
+
 const profile = (req, res, next) => {
   const schema = validateRequest.object({
     profile: validateRequest.object().required()
@@ -120,6 +128,23 @@ const product = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const schedule = (req, res, next) => {
+  const schema = validateRequest.object({
+    id: validateRequest.string().required(),
+    year: validateRequest.number().optional()
+  })
+
+  return validate(req.params, req, next, schema)
+}
+
+const timeslot = (req, res, next) => {
+  const schema = validateRequest.object({
+    timeslot: validateRequest.object().required(),    
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
 const search = (req, res, next) => {  
   const schema = validateRequest.object({})
   return validate(req.query, req, next, schema)
@@ -127,6 +152,7 @@ const search = (req, res, next) => {
 
 module.exports = { 
   id,
+  slug,
   token,
   social,
   newCrendentials, 
@@ -137,5 +163,7 @@ module.exports = {
   profile, 
   role, 
   product,
-  search
+  search,
+  schedule,
+  timeslot
  }

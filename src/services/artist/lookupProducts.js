@@ -3,21 +3,19 @@ const ArtistService = require('./base')
 
 module.exports = class SaveProfileService extends ArtistService
 {
-    constructor(id) {
-      super()
-      this.id = id
+    constructor(user, data) {
+      super(user)      
     }
 
     async lookup() {
       await this.lookupArtistWithProducts()
-      await this.ensureArtistWasFound()      
+      await this.ensureArtistWasFound()
       return this
     }
 
     async lookupArtistWithProducts() {
       console.log('Searching for products...')
-      this.artist = await Artist
-        .findOne({ $or: [{ _id: this.id }, { user: this.id }] })
+      this.artist = await Artist.findOne({ $or: [{ _id: this.artistId }, { user: this.userId }] })
         .populate('products')
 
       return this
