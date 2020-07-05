@@ -150,6 +150,14 @@ const search = (req, res, next) => {
   return validate(req.query, req, next, schema)
 }
 
+const proposal = (req, res, next) => {
+  const schema = validateRequest.object({
+    proposal: validateRequest.object().required(),    
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
 module.exports = { 
   id,
   slug,
@@ -165,5 +173,6 @@ module.exports = {
   product,
   search,
   schedule,
-  timeslot
+  timeslot,
+  proposal
  }
