@@ -15,7 +15,7 @@ api.use('/categories', category)
 api.use('/artists', artist)
 api.use('/contractors', contractor)
 api.use('/schedules', schedule)
-api.use('/presentation', presentation)
+api.use('/presentations', presentation)
 api.use('/', payment)
 
 module.exports = api

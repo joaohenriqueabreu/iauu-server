@@ -1,6 +1,7 @@
 const BadRequestException = require('../../exception/bad')
 const BaseService = require('../base')
-
+const Presentation = require('../../models/presentation')
+const timeslotSchema = require('../../models/schemas/timeslot')
 
 module.exports = class SaveProposalService extends BaseService
 {
@@ -11,33 +12,43 @@ module.exports = class SaveProposalService extends BaseService
         throw new BadRequestException('Data is required')
       }
 
+      this.user = user
       this.proposal = data.proposal
-      this.presentation = new 
     }
 
     async save() {
+      await this.ensureProposedTimeslotsDontOverlap()
       await this.createPresentation()
       await this.populateModel()
-      await this.saveArtist()
+      await this.savePresentation()
+      return this
+    }
+
+    ensureProposedTimeslotsDontOverlap() {
       return this
     }
 
     createPresentation() {
-
+      this.presentation = new Presentation()
+      this.presentation.status = 'proposal'
+      this.contractor = this.user.role_id
+      return this
     }
 
     populateModel() {
-      console.log('Checking if product exists...')
-      const self = this
-      console.log(self.product)
-      const index = _.findIndex(this.artist.products, (product) => product.id === self.product.id)
+      this.presentation.artist = this.proposal.artist.id
+      this.presentation.address = this.proposal.location
 
-      if (index > -1) {
-        this.artist.products[index] = this.product
-        return this
-      }
+      // delete from incoming data so it's not copied inside model
+      delete this.proposal.artist
+      delete this.proposal.location
 
-      this.artist.products.push(this.product)
+      this.presentation.proposal = this.proposal
+      return this
+    }
+
+    async savePresentation() {
+      await this.presentation.save()
       return this
     }
 }

@@ -2,12 +2,9 @@ require('dotenv').config()
 const db = require('../data/db')
 const BaseModel = require('./base')
 const baseSchemaOptions = require('./schemas/options')
-const { v4: uid } = require('uuid');
 
+const proposalSchema = require('./schemas/proposal')
 const addressSchema = require('./schemas/address')
-const socialSchema = require('./schemas/media')
-const productsSchema = require('./schemas/product')
-const timeslotSchema = require('./schemas/timeslot')
 
 const { Schema } = db
 
@@ -27,39 +24,18 @@ const presentationSchema = new Schema({
     ref: 'Artist'
   },
 
-  status: { type: String, enum: ['proposal', 'accepted', 'completed']},
+  address: addressSchema,
 
-  company_name: { type: String },
-  slug: { 
-    type: String,
-    default: uid()
-  },
-  document: { type: String },
-  phone: { type: String },
-  story: { type: String },
-  media: {
-    bg: { type: String },
-    presentations: [String]
-  },
-  category: {
-    name: { type: String },
-    subcategories: [String]
-  },
+  status: { type: String, enum: ['proposal', 'accepted', 'completed'], required: true },
+  proposal: proposalSchema
 
-  products: [productsSchema],
-  schedule: [timeslotSchema],
-
-  tags: [String],
-  social: [socialSchema],
-  address: addressSchema
 }, { ...baseSchemaOptions })
 
-class Artist extends BaseModel {
+class Presentation extends BaseModel {
   constructor() {
     super()
   }
 }
 
-artistSchema.index({ company_name: 'text', story: 'text', 'category.name': 'text', 'category.subcategory': 'text', tags: 'text' });
-artistSchema.loadClass(Artist)
-module.exports = db.model('Artist', artistSchema)
+presentationSchema.loadClass(Presentation)
+module.exports = db.model('Presentation', presentationSchema)
