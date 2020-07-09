@@ -16,7 +16,14 @@ const validate = (data, req, next, schema) => {
   }
 
   console.log('Request Validated...')
-  req.data = value
+
+  // Allows multiple validations combined
+  if (req.data === undefined) {
+    req.data = value  
+  } else {
+    req.data = { ...req.data, ...value }
+  }
+  
   next()
 }
 

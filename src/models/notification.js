@@ -5,7 +5,6 @@ const baseSchemaOptions = require('./schemas/options')
 
 const proposalSchema = require('./schemas/proposal')
 const addressSchema = require('./schemas/address')
-const timeslotSchema = require('./schemas/timeslot')
 
 const { Schema } = db
 
@@ -15,29 +14,21 @@ const slugfy = function (slug) {
     : this.user.name.toLowerCase().replace(' ', '-')
 }
 
-const presentationSchema = new Schema({  
-  contractor: {
+const notificationSchema = new Schema({  
+  user: {
     type: Schema.Types.ObjectId,
-    ref: 'Contractor'
-  },
-  artist: {
-    type: Schema.Types.ObjectId,
-    ref: 'Artist'
+    ref: 'User'
   },
 
-  address: addressSchema,
-
-  status: { type: String, enum: ['proposal', 'accepted', 'completed'], required: true },
-  timeslot: timeslotSchema,
-  proposal: proposalSchema
-
+  title: { type: String, required: true },
+  link: { type: String, required: true }
 }, { ...baseSchemaOptions })
 
-class Presentation extends BaseModel {
+class Notification extends BaseModel {
   constructor() {
     super()
   }
 }
 
-presentationSchema.loadClass(Presentation)
-module.exports = db.model('Presentation', presentationSchema)
+notificationSchema.loadClass(Notification)
+module.exports = db.model('Notification', notificationSchema)

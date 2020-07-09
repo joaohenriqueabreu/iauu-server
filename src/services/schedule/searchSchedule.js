@@ -15,6 +15,7 @@ module.exports = class SearchScheduleService extends BaseService
       this.artist = {}
 
       this.year = data !== undefined && data.year !== undefined ? data.year : new Date().getFullYear()
+      this.schedule = []      
     }
 
     async search() {
@@ -42,10 +43,11 @@ module.exports = class SearchScheduleService extends BaseService
     populateYearSchedule() {
       // do nothing for now
       console.log(`Searching for ${this.year} schedule...`)
+      this.schedule = [...this.schedule, ...this.artist.schedule]
       return this
     }
 
     getSchedule() {
-      return this.artist.schedule
+      return this.schedule
     }
 }

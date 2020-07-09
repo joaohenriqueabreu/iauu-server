@@ -12,6 +12,9 @@ api.post('/proposal',
   presentationController.saveProposal
 )
 
+api.get('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.search)
+api.put('/:id/timeslot', authorizationMiddleware.authorize, validationMiddleware.id, validationMiddleware.timeslot, presentationController.selectTimeslot)
+
 module.exports = api
 
 // const api   = require('express').Router()

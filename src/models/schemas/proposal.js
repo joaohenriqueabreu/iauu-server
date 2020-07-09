@@ -4,10 +4,12 @@ const timeslotSchema = require('./timeslot')
 const productSchema = require('./product')
 
 const proposalSchema = new db.Schema({
+    title: { type: String },
     price: { type: Number },
     duration: { type: Number },
-    timeslot: timeslotSchema,
-    product: productSchema
+    timeslots: [timeslotSchema],
+    product: productSchema,
+    notes: { type: String }
     // timeslots: { 
     //   type: [timeslotSchema], 
     //   validate: (timeslot) => Array.isArray(timeslot) && timeslot.length > 0,

@@ -5,8 +5,8 @@ const scheduleController = require('../controller/schedule')
 const authorizationMiddleware = require('../middleware/authorization')
 const validationMiddleware = require('../middleware/validation')
 
-api.get('/', authorizationMiddleware.authorize, validationMiddleware.schedule, scheduleController.mySchedule)
-api.get('/:id/:year?', validationMiddleware.schedule, scheduleController.publicSearch)
+api.get('/public/:id/:year?', validationMiddleware.schedule, scheduleController.publicSearch)
+api.get('/my/:year?', authorizationMiddleware.authorize, scheduleController.mySchedule)
 
 api.post('/', authorizationMiddleware.authorize, validationMiddleware.timeslot, scheduleController.saveTimeslot)
 api.delete('/:id', authorizationMiddleware.authorize, validationMiddleware.id, scheduleController.deleteTimeslot)

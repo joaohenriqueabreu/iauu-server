@@ -8,6 +8,7 @@ const productSchema = new db.Schema({
     photo: { type: String },
     price: { type: Number },
     duration: { type: Number },
+    custom: { type: Boolean, default: false },
     medias: [mediaSchema],
     items: [String]
 }, baseSchemaOptions)

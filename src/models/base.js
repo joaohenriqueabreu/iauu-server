@@ -43,7 +43,7 @@ module.exports = class BaseModel {
   }
 
   handleError(a, b, c, d) {
-    console.log('opsy')
+    console.log('ops')
     console.log(a)
     console.log(b)
     console.log(c)

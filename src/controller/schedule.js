@@ -2,6 +2,7 @@
 
 const BaseController = require('./base')
 const SearchScheduleService = require('../services/schedule/searchSchedule')
+const SearchPrivateScheduleService = require('../services/schedule/searchPrivateSchedule')
 const SaveTimeslotService = require('../services/schedule/saveTimeslot')
 const DeleteTimeslotService = require('../services/schedule/deleteTimeslot')
 
@@ -16,7 +17,12 @@ class ScheduleController extends BaseController {
   }
   
   mySchedule(req, res, next) {
-    
+    console.log("Requesting private schedule...")
+
+    const searchScheduleService = new SearchPrivateScheduleService(req.user, req.data)
+    searchScheduleService.search(req.user, req.data)
+      .then(() => { res.status(200).json(searchScheduleService.getSchedule()) })
+      .catch((error) => next(error))
   }
 
   saveTimeslot(req, res, next) {    

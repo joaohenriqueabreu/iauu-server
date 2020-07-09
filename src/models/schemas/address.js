@@ -1,7 +1,9 @@
 const db = require('../../data/db')
+const BaseModel = require('../base')
 const coordinates = require('./coordinates')
+const baseSchemaOptions = require('../schemas/options')
 
-module.exports = new db.Schema({    
+const addressSchema = new db.Schema({
     street: {type: String},
     number: {type: String},
     neighboorhood: {type: String},
@@ -9,5 +11,27 @@ module.exports = new db.Schema({
     state: {type: String},
     country: {type: String},
     zipcode: {type: String},
-    coordinates: {type: coordinates},    
-})
+    coordinates: {type: coordinates}, 
+}, baseSchemaOptions)
+
+const SHOW_PROPS = ['street', 'number', 'neighboorhood', 'city', 'state', 'country']
+class Address extends BaseModel {
+  constructor() {
+    super()
+  }
+
+  get display() {
+    const addressDisplay = []
+    for (const prop in this) {
+      console.log(prop)
+      if (SHOW_PROPS.includes(prop) && this[prop] !== undefined && this[prop] !==null && this[prop].length > 0) {
+        addressDisplay.push(this[prop])
+      }
+    }
+
+    return addressDisplay.join(', ')
+  }
+}
+
+addressSchema.loadClass(Address)
+module.exports = addressSchema
