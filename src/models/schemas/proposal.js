@@ -2,6 +2,7 @@ const db = require('../../data/db')
 const baseSchemaOptions = require('../schemas/options')
 const timeslotSchema = require('./timeslot')
 const productSchema = require('./product')
+const counterOfferSchema = require('./counterOffer')
 
 const proposalSchema = new db.Schema({
     title: { type: String },
@@ -9,11 +10,8 @@ const proposalSchema = new db.Schema({
     duration: { type: Number },
     timeslots: [timeslotSchema],
     product: productSchema,
-    notes: { type: String }
-    // timeslots: { 
-    //   type: [timeslotSchema], 
-    //   validate: (timeslot) => Array.isArray(timeslot) && timeslot.length > 0,
-    // }
+    notes: { type: String },
+    counterOffer: counterOfferSchema
 }, baseSchemaOptions)
 
 module.exports = proposalSchema

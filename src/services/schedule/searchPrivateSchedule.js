@@ -24,7 +24,7 @@ module.exports = class SearchPrivateScheduleService extends SearchScheduleServic
   }
 
   async lookupPresentations() {
-    this.presentations = await Presentation.find({ artist: this.artist.id })
+    this.presentations = await Presentation.find({ artist: this.artist.id, status: {$in: ['proposal', 'accepted']}})
     return this
   }
 

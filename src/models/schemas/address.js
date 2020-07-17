@@ -23,7 +23,6 @@ class Address extends BaseModel {
   get display() {
     const addressDisplay = []
     for (const prop in this) {
-      console.log(prop)
       if (SHOW_PROPS.includes(prop) && this[prop] !== undefined && this[prop] !==null && this[prop].length > 0) {
         addressDisplay.push(this[prop])
       }

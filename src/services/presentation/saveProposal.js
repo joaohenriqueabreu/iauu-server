@@ -8,13 +8,8 @@ const Presentation = require('../../models/presentation')
 module.exports = class SaveProposalService extends PresentationService
 {
     constructor(user, data) {
-      super(user)
+      super(user, data)
 
-      if (data === undefined) {
-        throw new BadRequestException('Data is required')
-      }
-
-      this.user = user
       this.proposal = data.proposal
       
     }

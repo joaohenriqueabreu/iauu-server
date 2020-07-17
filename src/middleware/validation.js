@@ -94,7 +94,6 @@ const social = (req, res, next) => {
     token: validateRequest.string().required()
   })
 
-  console.log(req.body)
   return validate(req.body, req, next, schema)
 }
 
@@ -165,6 +164,14 @@ const proposal = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const counterOffer = (req, res, next) => {
+  const schema = validateRequest.object({
+    counterOffer: validateRequest.object().required(),    
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
 module.exports = { 
   id,
   slug,
@@ -181,5 +188,6 @@ module.exports = {
   search,
   schedule,
   timeslot,
-  proposal
+  proposal,
+  counterOffer
  }

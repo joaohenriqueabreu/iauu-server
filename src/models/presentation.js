@@ -27,10 +27,19 @@ const presentationSchema = new Schema({
 
   address: addressSchema,
 
-  status: { type: String, enum: ['proposal', 'accepted', 'completed'], required: true },
-  timeslot: timeslotSchema,
-  proposal: proposalSchema
+  /**
+   * Proposal   - Proposal stage
+   * Accepted   - Proposal accepted (pré-presentation)
+   * Completed  - Presentation completed
+   * Rejected   - Proposal rejected
+   * Cancelled  - Presentation cancelled
+   */
 
+  status: { type: String, enum: ['proposal', 'accepted', 'completed', 'rejected', 'cancelled'], required: true },
+  timeslot: timeslotSchema,
+  proposal: proposalSchema,
+  price: { type: Number },
+  duration: { type: Number }
 }, { ...baseSchemaOptions })
 
 class Presentation extends BaseModel {

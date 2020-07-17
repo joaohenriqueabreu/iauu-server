@@ -9,7 +9,7 @@ const timeslotSchema = new db.Schema({
   start_dt: { type: Date },
   end_dt: { type: Date },
   full_day: { type: Boolean },
-  type: { type: String, enum: ['proposal', 'presentation', 'busy']},
+  type: { type: String, enum: ['event', 'busy']},
   repeat: { type: String, enum: ['day', 'week', 'month', 'year']},
 }, baseSchemaOptions)
 
@@ -27,7 +27,7 @@ class Timeslot extends BaseModel {
   }
 
   get artist_id() {
-    if (this.type !== 'busy') {
+    if (this.type === 'event') {
       return null
     }
 
@@ -40,6 +40,14 @@ class Timeslot extends BaseModel {
     }
 
     return this.ownerDocument().proposal.title
+  }
+
+  get status() {
+    if (this.type === 'busy') {
+      return 'busy'
+    }
+
+    return this.ownerDocument().status
   }
 }
 

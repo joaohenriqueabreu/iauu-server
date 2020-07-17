@@ -15,6 +15,31 @@ api.post('/proposal',
 api.get('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.search)
 api.put('/:id/timeslot', authorizationMiddleware.authorize, validationMiddleware.id, validationMiddleware.timeslot, presentationController.selectTimeslot)
 
+api.post('/:id/proposal', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.id, presentationController.acceptProposal)
+api.delete('/:id/proposal', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.id, presentationController.rejectProposal)
+
+api.post('/:id/proposal/counterOffer', 
+  authorizationMiddleware.authorize, 
+  authorizationMiddleware.artist, 
+  validationMiddleware.id, 
+  validationMiddleware.counterOffer, 
+  presentationController.sendCounterOffer
+)
+
+api.put('/:id/proposal/counterOffer', 
+  authorizationMiddleware.authorize, 
+  authorizationMiddleware.contractor, 
+  validationMiddleware.id, 
+  presentationController.acceptCounterOffer
+)
+
+api.delete('/:id/proposal/counterOffer', 
+  authorizationMiddleware.authorize,  
+  authorizationMiddleware.contractor, 
+  validationMiddleware.id, 
+  presentationController.rejectCounterOffer
+)
+
 module.exports = api
 
 // const api   = require('express').Router()
