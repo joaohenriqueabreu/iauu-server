@@ -12,7 +12,7 @@ const validate = (data, req, next, schema) => {
 
   const { error, value } = schema.validate(data, options)
   if (error) {
-    next(new BadRequestException(`Validation error: ${error.details.map((x) => x.message).join(', ')}`))    
+    next(new BadRequestException(`Validation error: ${error.details.map((x) => x.message).join(', ')}`))
   }
 
   console.log('Request Validated...')
@@ -23,6 +23,8 @@ const validate = (data, req, next, schema) => {
   } else {
     req.data = { ...req.data, ...value }
   }
+
+  console.log(req.data)
   
   next()
 }
@@ -110,6 +112,17 @@ const id = (req, res, next) => {
   return validate(req.params, req, next, schema)
 }
 
+// Raw query and body parsing to data
+const query = (req, res, next) => {
+  req.data = { ...req.data, ...req.query }
+  next()
+}
+
+const body = (req, res, next) => {
+  req.data = { ...req.data, ...req.body }
+  next()
+}
+
 const slug = (req, res, next) => {
   const schema = validateRequest.object({
     slug: validateRequest.string().required()    
@@ -166,7 +179,7 @@ const proposal = (req, res, next) => {
 
 const counterOffer = (req, res, next) => {
   const schema = validateRequest.object({
-    counterOffer: validateRequest.object().required(),    
+    counterOffer: validateRequest.object().required(),
   })
 
   return validate(req.body, req, next, schema)
@@ -174,6 +187,8 @@ const counterOffer = (req, res, next) => {
 
 module.exports = { 
   id,
+  query,  
+  body,
   slug,
   token,
   social,

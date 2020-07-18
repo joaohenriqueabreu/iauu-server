@@ -33,9 +33,10 @@ const presentationSchema = new Schema({
    * Completed  - Presentation completed
    * Rejected   - Proposal rejected
    * Cancelled  - Presentation cancelled
+   * Disputed   - Presentation disputed
    */
 
-  status: { type: String, enum: ['proposal', 'accepted', 'completed', 'rejected', 'cancelled'], required: true },
+  status: { type: String, enum: ['proposal', 'accepted', 'completed', 'rejected', 'cancelled', 'disputed'], required: true },
   timeslot: timeslotSchema,
   proposal: proposalSchema,
   price: { type: Number },

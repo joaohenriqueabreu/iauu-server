@@ -5,12 +5,18 @@ const SearchScheduleService = require('./searchSchedule')
 module.exports = class SearchPrivateScheduleService extends SearchScheduleService
 {
   constructor(user, data) {
-    data = {}
+    // data = {}
     data.id = user.role_id
     super(user, data)
 
     this.presentations = []
     this.proposals = []
+    
+    if (data.status === undefined) {
+      this.status = ['proposal', 'accepted']
+    } else {
+      this.status = data.status
+    }
   }
 
   async search() {
@@ -24,7 +30,7 @@ module.exports = class SearchPrivateScheduleService extends SearchScheduleServic
   }
 
   async lookupPresentations() {
-    this.presentations = await Presentation.find({ artist: this.artist.id, status: {$in: ['proposal', 'accepted']}})
+    this.presentations = await Presentation.find({ artist: this.artist.id, status: { $in: this.status }})
     return this
   }
 
@@ -39,7 +45,7 @@ module.exports = class SearchPrivateScheduleService extends SearchScheduleServic
   }
 
   populatePresentationSchedule() {
-    const presentations = _.filter(this.presentations, (presentation) => presentation.status === 'accepted')
+    const presentations = _.filter(this.presentations, (presentation) => ['accepted', 'completed', 'cancelled'].includes(presentation.status))
     const presentationTimeslots = _.map(presentations, 'timeslot')
 
     this.schedule = [...this.schedule, ...presentationTimeslots]

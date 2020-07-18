@@ -18,15 +18,17 @@ module.exports = class RejectProposalService extends ReplyProposalService
 
     // Presentation price and duration
     // If there is a product, copy value from the product, otherwise look for a counter offer
-    if (this.presentation.product !== undefined && !this.presentation.product.custom) {
-      this.presentation.price = this.presentation.product.price
-      this.presentation.duration = this.presentation.product.duration
+    if (this.presentation.proposal.product !== undefined && !this.presentation.proposal.product.custom) {
+      console.log('Has selected product...')
+      this.presentation.price = this.presentation.proposal.product.price
+      this.presentation.duration = this.presentation.proposal.product.duration
       return this
     }
 
-    if (this.presentation.counterOffer !== undefined && this.presentation.counterOffer.status === 'accepted') {
-      this.presentation.price = this.presentation.counterOffer.price
-      this.presentation.duration = this.presentation.counterOffer.duration
+    if (this.presentation.proposal.counterOffer !== undefined && this.presentation.proposal.counterOffer.status === 'accepted') {
+      console.log('Has counter offer...')
+      this.presentation.price = this.presentation.proposal.counterOffer.price
+      this.presentation.duration = this.presentation.proposal.counterOffer.duration
       return this
     }
 
