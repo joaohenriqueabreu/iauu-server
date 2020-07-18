@@ -9,9 +9,7 @@ module.exports = class RetrieveUserService extends BaseService {
   }
 
   async retrieve() {    
-    console.log(this.filters)
     this.user = await User.fetchOne(this.filters)
-    console.log(this.user)
 
     if (User.notFound(this.user)) {
       throw new Error('User not found')

@@ -1,6 +1,7 @@
 'use strict'
 
 const BaseController = require('./base')
+const SearchProposalsService = require('../services/presentation/searchProposals')
 const SearchPresentationsService = require('../services/presentation/searchPresentations')
 const SearchPresentationService = require('../services/presentation/searchPresentation')
 const SaveProposalService = require('../services/presentation/saveProposal')
@@ -14,6 +15,14 @@ const CompletePresentationService = require('../services/presentation/completePr
 const CancelPresentationService = require('../services/presentation/cancelPresentation')
 
 class PresentationController extends BaseController {
+  searchProposals(req, res, next) {
+    console.log('Searching proposals...')
+    const searchProposalsService = new SearchProposalsService(req.user, req.data)
+    searchProposalsService.search()
+      .then(() => { res.status(200).json(searchProposalsService.getPresentations()) })
+      .catch((error) => next(error))
+  }
+
   searchPresentations(req, res, next) {
     console.log('Searching presentations...')
     const searchPresentationsService = new SearchPresentationsService(req.user, req.data)

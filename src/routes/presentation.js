@@ -6,7 +6,7 @@ const authorizationMiddleware = require('../middleware/authorization')
 const validationMiddleware = require('../middleware/validation')
 
 api.get('/', authorizationMiddleware.authorize, presentationController.searchPresentations)
-// api.get('/proposals', authorizationMiddleware.authorize, presentationController.searchProposals)
+api.get('/proposals', authorizationMiddleware.authorize, presentationController.searchProposals)
 
 api.post('/proposal', 
   authorizationMiddleware.authorize,

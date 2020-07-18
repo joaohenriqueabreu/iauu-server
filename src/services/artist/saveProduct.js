@@ -25,7 +25,6 @@ module.exports = class SaveProductService extends ArtistService
     populateModel() {
       console.log('Checking if product exists...')
       const self = this
-      console.log(self.product)
       const index = _.findIndex(this.artist.products, (product) => product.id === self.product.id)
 
       if (index > -1) {

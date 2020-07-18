@@ -3,7 +3,7 @@ const BadRequestException = require('../../exception/bad')
 const BaseService = require('../base')
 const Presentation = require('../../models/presentation')
 
-module.exports = class SearchPresentationsService extends BaseService
+module.exports = class SearchProposalsService extends BaseService
 {
     constructor(user, data) {
       super(user)
@@ -15,7 +15,7 @@ module.exports = class SearchPresentationsService extends BaseService
 
     async search() {
       const roleCondition = this.role.includes('artist') ? { artist: this.id } : { contractor: this.id }
-      this.presentations = await Presentation.find({ ...roleCondition, status: { $nin: ['rejected'] }})
+      this.presentations = await Presentation.find({ ...roleCondition, status: { $in: ['proposal'] }})
         .populate({ path: 'contractor', populate: { path: 'user' }})
         .populate({ path: 'artist', populate: 'user' })
 
