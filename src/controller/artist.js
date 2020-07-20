@@ -8,6 +8,7 @@ const SaveArtistProfileService = require('../services/artist/saveProfile')
 const SaveProductService = require('../services/artist/saveProduct')
 const DeleteProductService = require('../services/artist/deleteProduct')
 const LookupProductsService = require('../services/artist/lookupProducts')
+const SendFeedbackService = require('../services/artist/sendFeedback')
 
 const faker = require('faker')
 const { Artist, Product } = require('../seeds')
@@ -68,6 +69,14 @@ class ArtistController extends BaseController {
     const deleteProductService = new DeleteProductService(req.user, req.data)
     deleteProductService.delete()
       .then(() => { res.status(200).json(deleteProductService.getProducts()) })
+      .catch((error) => next(error))
+  }
+
+  sendFeedback(req, res, next) {
+    console.log('Sending feedback...')
+    const sendFeedbackService = new SendFeedbackService(req.user, req.data)
+    sendFeedbackService.save()
+      .then(() => { res.status(200).json(sendFeedbackService.getPresentation()) })
       .catch((error) => next(error))
   }
 }

@@ -12,13 +12,17 @@ module.exports = class ReplyProposalService extends PresentationService
     async reply() {
       await this.searchPresentation()
       await this.ensurePresentationWasFound()
-      await this.ensureCanReplyProposal()
+      await this.ensureIsPartyToProposal()
       await this.populatePresentation()
       await this.savePresentation()
       return this
     }
 
-    ensureCanReplyProposal() {
+    ensureIsPartyToProposal() {
+      if (this.user.role_id !== this.presentation.artist.id && this.user.role_id !== this.presentation.contractor.id) {
+        throw new UnauthorizedException('User is not party to presentation')
+      }
+
       return this
     }
 }

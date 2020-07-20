@@ -24,8 +24,6 @@ const validate = (data, req, next, schema) => {
     req.data = { ...req.data, ...value }
   }
 
-  console.log(req.data)
-  
   next()
 }
 

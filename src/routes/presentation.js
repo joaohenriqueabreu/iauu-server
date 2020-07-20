@@ -22,7 +22,7 @@ api.delete('/:id', authorizationMiddleware.authorize, validationMiddleware.id, p
 api.put('/:id/timeslot', authorizationMiddleware.authorize, validationMiddleware.id, validationMiddleware.timeslot, presentationController.selectTimeslot)
 
 api.post('/:id/proposal', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.id, presentationController.acceptProposal)
-api.delete('/:id/proposal', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.id, presentationController.rejectProposal)
+api.delete('/:id/proposal', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.rejectProposal)
 
 api.post('/:id/proposal/counterOffer', 
   authorizationMiddleware.authorize, 

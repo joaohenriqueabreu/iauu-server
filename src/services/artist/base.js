@@ -25,12 +25,12 @@ module.exports = class ArtistService extends BaseService
     }
 
     async lookupArtist() {
-      console.log('Searching for artist...')      
+      console.log('Searching for artist...')
       this.artist = await Artist.findById(this.id).populate('user')
       return this
     }
 
-    ensureArtistWasFound() {      
+    ensureArtistWasFound() {
       if (Artist.notFound(this.artist) || !this.artist instanceof Artist) {
         throw new Error('Artist not found...')
       }

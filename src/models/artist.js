@@ -8,6 +8,7 @@ const addressSchema = require('./schemas/address')
 const socialSchema = require('./schemas/media')
 const productsSchema = require('./schemas/product')
 const timeslotSchema = require('./schemas/timeslot')
+const feedbackSchema = require('./schemas/feedback')
 
 const { Schema } = db
 
@@ -45,7 +46,8 @@ const artistSchema = new Schema({
 
   tags: [String],
   social: [socialSchema],
-  address: addressSchema
+  address: addressSchema,
+  feedbacks: [feedbackSchema]
 }, { ...baseSchemaOptions })
 
 class Artist extends BaseModel {

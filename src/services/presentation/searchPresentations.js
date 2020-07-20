@@ -15,7 +15,7 @@ module.exports = class SearchPresentationsService extends BaseService
 
     async search() {
       const roleCondition = this.role.includes('artist') ? { artist: this.id } : { contractor: this.id }
-      this.presentations = await Presentation.find({ ...roleCondition, status: { $nin: ['rejected'] }})
+      this.presentations = await Presentation.find({ ...roleCondition, status: { $nin: ['proposal', 'rejected'] }})
         .populate({ path: 'contractor', populate: { path: 'user' }})
         .populate({ path: 'artist', populate: 'user' })
 

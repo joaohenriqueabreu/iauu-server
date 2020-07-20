@@ -20,11 +20,9 @@ module.exports = class PresentationService extends BaseService
 
     async searchPresentation() {
       this.presentation = await Presentation.findById(this.id)
-        .populate({ 
-          path: 'contractor',
-          populate: { path: 'user' }
-        })
-        .populate('artist.user')
+        .populate({ path: 'contractor', populate: { path: 'user' }})
+        .populate({ path: 'artist',  populate: { path: 'user' }})
+
       return this
     }
 

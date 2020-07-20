@@ -3,6 +3,7 @@ const db = require('../data/db')
 const BaseModel = require('./base')
 
 const address = require('./schemas/address')
+const baseSchemaOptions = require('./schemas/options')
 
 const { Schema } = db
 
@@ -13,8 +14,7 @@ const contractorSchema = new Schema({
   },
 
   address: {type: address}
-  
-})
+}, { ...baseSchemaOptions })
 
 class Contractor extends BaseModel {
   constructor() {

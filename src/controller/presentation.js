@@ -66,7 +66,7 @@ class PresentationController extends BaseController {
   acceptCounterOffer(req, res, next) {
     console.log('Updating timeslot...')
     const acceptCounterOfferService = new AcceptCounterOfferService(req.user, req.data)
-    acceptCounterOfferService.send()
+    acceptCounterOfferService.reply()
       .then(() => { res.status(200).json(acceptCounterOfferService.getPresentation()) })
       .catch((error) => next(error))
   }
@@ -74,7 +74,7 @@ class PresentationController extends BaseController {
   rejectCounterOffer(req, res, next) {
     console.log('Updating timeslot...')
     const rejectCounterOfferService = new RejectCounterOfferService(req.user, req.data)
-    rejectCounterOfferService.send()
+    rejectCounterOfferService.reply()
       .then(() => { res.status(200).json(rejectCounterOfferService.getPresentation()) })
       .catch((error) => next(error))
   }
