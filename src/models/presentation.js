@@ -37,6 +37,7 @@ const presentationSchema = new Schema({
    */
 
   status: { type: String, enum: ['proposal', 'accepted', 'completed', 'rejected', 'cancelled', 'disputed'], required: true },
+  confirm_status: [String],
   timeslot: timeslotSchema,
   proposal: proposalSchema,
   price: { type: Number },

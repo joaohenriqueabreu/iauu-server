@@ -76,7 +76,7 @@ class ArtistController extends BaseController {
     console.log('Sending feedback...')
     const sendFeedbackService = new SendFeedbackService(req.user, req.data)
     sendFeedbackService.save()
-      .then(() => { res.status(200).json(sendFeedbackService.getPresentation()) })
+      .then(() => { res.status(200).json({}) })
       .catch((error) => next(error))
   }
 }

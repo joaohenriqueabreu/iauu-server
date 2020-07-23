@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const ArtistService = require('./base')
-const BadRequestException = require('../../exception/bad')
 
 module.exports = class SendFeedbackService extends ArtistService
 {
@@ -13,10 +12,11 @@ module.exports = class SendFeedbackService extends ArtistService
       this.feedback = data.feedback
     }
 
-    async select() {
+    async save() {
       await this.lookupArtist()
       await this.ensureArtistWasFound()
       await this.populateFeedback()
+      await this.calculateRating()
       await this.saveArtist()
       return this
     }
@@ -33,6 +33,11 @@ module.exports = class SendFeedbackService extends ArtistService
         },
       })
 
+      return this
+    }
+
+    calculateRating() {
+      this.artist.rating = _.meanBy(this.artist.feedbacks, 'rating')
       return this
     }
 }

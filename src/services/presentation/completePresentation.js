@@ -31,7 +31,22 @@ module.exports = class CompletePresentationService extends PresentationService
     }
 
     populatePresentation() {
-      this.presentation.status = 'completed'
+      if (this.presentation.confirm_status === undefined || this.presentation.confirm_status === null) { 
+        this.presentation.confirm_status = []
+      }
+
+      if (this.presentation.confirm_status.includes(this.user.role)) {
+        throw new BadRequestException(`Already confirmed by ${this.user.role}`)
+      }
+
+      this.presentation.confirm_status.push(this.user.role[0])
+
+      // When both parties confirm, we can complete the presentation
+      if (this.presentation.confirm_status.includes('artist') && this.presentation.confirm_status.includes('contractor')) {
+        this.presentation.status = 'completed'
+        return this
+      }
+
       return this
     }
 

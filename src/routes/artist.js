@@ -16,6 +16,12 @@ api.get('/:id/products', validationMiddleware.id, authorizationMiddleware.author
 api.post('/products', validationMiddleware.product, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.saveProduct)
 api.delete('/products/:id', validationMiddleware.id, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.deleteProduct)
 
-api.put('/:id/feedback', authorizationMiddleware.authorize, authorizationMiddleware.contractor, validationMiddleware.id, artistController.sendFeedback)
+api.put('/:id/feedback', 
+  authorizationMiddleware.authorize, 
+  authorizationMiddleware.contractor, 
+  validationMiddleware.id, 
+  validationMiddleware.body, 
+  artistController.sendFeedback
+)
 
 module.exports = api

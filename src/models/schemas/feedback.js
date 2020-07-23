@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb')
 const feedbackSchema = new db.Schema({
     rating: { type: Number },
     notes: { type: String },
+    safe: { type: Boolean, default: true },
     from: {
       name: { type: String },
       photo: { type: String },

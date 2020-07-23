@@ -1,5 +1,6 @@
 require('dotenv').config()
 const db = require('../data/db')
+const _ = require('lodash')
 const BaseModel = require('./base')
 const baseSchemaOptions = require('./schemas/options')
 const { v4: uid } = require('uuid');
@@ -47,12 +48,21 @@ const artistSchema = new Schema({
   tags: [String],
   social: [socialSchema],
   address: addressSchema,
+  rating: { type: Number },
   feedbacks: [feedbackSchema]
 }, { ...baseSchemaOptions })
 
 class Artist extends BaseModel {
   constructor() {
     super()
+  }
+
+  get feedback_count() {
+    if (this.feedbacks === undefined) {
+      return 0
+    }
+
+    return this.feedbacks.length
   }
 }
 
