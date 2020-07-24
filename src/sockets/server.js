@@ -27,8 +27,6 @@ io.of('/chat').on('connection', (socket) => {
 
   socket.on('send', (message) => {
     console.log('New message received...')
-    console.log(message)
-    console.log(`Emitting received event to ${room}`)
 
     // TODO validate users on message
     const saveMessageService = new SaveMessageService(null, { id: room, message: message })
