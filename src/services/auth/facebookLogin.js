@@ -43,7 +43,9 @@ module.exports = class FacebookLoginService extends SocialLoginService {
       password: this.socialData.id, // writing a "fake" pwd that will not be encrypted, but is required for saving
       facebook_id: this.socialData.id,
       photo: this.socialData.picture.data.url,
-      is_verified: true,
+      verification: {
+        is_verified: true
+      }
     })
 
     return this

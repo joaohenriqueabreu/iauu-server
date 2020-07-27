@@ -19,12 +19,17 @@ module.exports = class AuthenticateUserService extends AuthService
     }
 
     async validateLogin() {
+      console.log(this.user)
       if (User.notFound(this.user)) {
         throw new UnauthorizedException('Invalid credentials provided')
       }
 
       if (! await this.validatePassword(this.password)) {
         throw new UnauthorizedException('Invalid credentials provided')
+      }
+
+      if (! this.user.verification.is_verified) {
+        throw new UnauthorizedException('User not verified')
       }
 
       return this

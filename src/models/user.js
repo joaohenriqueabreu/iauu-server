@@ -14,9 +14,12 @@ const userSchema = new Schema({
   photo: { type: String },
   first_name: { type: String },
   last_name: { type: String },
-  accept_terms: { type: Boolean },  
-  verification_token: { type: String, select: false },
-  is_verified: { type: Boolean, default: false },
+  accept_terms: { type: Boolean },
+  verification: {
+    token: { type: String, select: false },
+    is_verified: { type: Boolean, default: false },
+    issued_at: { type: Date, default: Date.now }
+  },
   reset_token: { type: String, select: false },
   reset_token_expiry: { type: Date },
   facebook_id: { type: String},
@@ -50,24 +53,24 @@ class User extends BaseModel {
 
   static fetchWithSensitiveDataById(id) {
     return this.findById(id)
-      .select('+password +access_token +verification_token')
+      .select('+password +access_token +verification')
       .populate('artist')
       .populate('contractor')
   }
 
-  static fetchWithSensitiveData(conditions) {    
+  static fetchWithSensitiveData(conditions) {
     return this.findOne(conditions)
-      .select('+password +access_token +verification_token')
+      .select('+password +access_token +verification')
       .populate('artist')
-      .populate('contractor')      
+      .populate('contractor')
   }
 
   generateVerificationUrl() {
-    return `${process.env.WEB_URL}/register/verify/${this.verification_token}`
+    return `${process.env.WEB_URL}/register/verify/${this.verification.token}`
   }
 
   generateResetPasswordUrl() {
-    return `${process.env.WEB_URL}/reset/password/${this.verification_token}`
+    return `${process.env.WEB_URL}/reset/password/${this.verification.token}`
   }
 
   getRoleId() {

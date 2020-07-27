@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const BaseService = require('../base')
 const { User, Artist, Contractor } = require('../../models')
 const GenerateTokenService = require('./generateToken')
+const SendMailService = require('../mail/sendMail')
 
 module.exports = class AuthService extends BaseService {
   constructor() {
@@ -47,7 +48,7 @@ module.exports = class AuthService extends BaseService {
   }
 
   generateVerificationToken() {
-    this.user.verification_token = GenerateTokenService.generateSimple()
+    this.user.verification.token = GenerateTokenService.generateSimple()
     return this
   }  
 
@@ -91,6 +92,13 @@ module.exports = class AuthService extends BaseService {
     const mailSvc = new SendMailService(this.user.email, this.mail.subtitle)
     await mailSvc.buildBody(this.mail.template, this.mail.data)
     await mailSvc.send()
+    return this
+  }
+
+  async sendRegistrationMail() {
+    const mailSvc = new SendMailService(this.user.email, 'iauu | Verifique sua conta')
+    await mailSvc.buildBody('register', {user: this.user, url: this.user.generateVerificationUrl() })
+    await mailSvc.send()    
     return this
   }
 }

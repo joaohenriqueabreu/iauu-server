@@ -29,6 +29,15 @@ class AuthController extends BaseController {
       .catch((error) => next(error))
   }
 
+  resendVerification(req, res, next) {
+    const { token } = req.data
+    const verifyUserService = new VerifyUserService(token)
+
+    verifyUserService.resend()
+      .then(() => res.status(200).send({}))
+      .catch((error) => next(error))
+  }
+
   login(req, res, next) {
     const { email, password } = req.data
     const loginUserService = new LoginUserService(email, password)

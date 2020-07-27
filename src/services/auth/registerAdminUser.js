@@ -1,7 +1,7 @@
 const AuthService = require('./auth')
 const { User, Artist, Contractor } = require('../../models')
 
-module.exports = class RegisterUserService extends AuthService {
+module.exports = class RegisterAdminUserService extends AuthService {
   constructor(name, email, password) {
     super()
     
@@ -10,21 +10,24 @@ module.exports = class RegisterUserService extends AuthService {
     }
 
     this.user.email = email
-    this.user.name = name    
-
-    this.password = password    
+    this.user.name = name
+    this.password = password
   }
 
-  async register() {    
+  async register() {
     await this.checkUserExists()
     await this.encryptPassword(this.password)
+    this.populateAdminInfo()
     await this.generateAccessToken()
-    await this.generateVerificationToken()
     await this.saveUser()    
 
-    // Do not await for send mail, just start process, it is taking >3s to complete
-    this.sendRegistrationMail()
-    console.log('Registered user...')
+    console.log('Registered admin user...')
+    return this
+  }
+
+  populateAdminInfo() {
+    this.user.role = 'admin'
+    this.user.verification.is_verified = true
     return this
   }
 
