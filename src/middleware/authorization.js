@@ -14,6 +14,17 @@ const owner = (req, res, next) => {
   next()
 }
 
+const admin = (req, res, next) => {
+  console.log('Checking if user is admin...')
+  if (!req.user.role.includes('admin')) {
+    console.log('Not an admin')
+    next('Unauthorized')
+  }
+
+  console.log('Admin...')
+  next()  
+}
+
 const artist = (req, res, next) => {
   console.log('Checking if user is artist...')
   if (!req.user.role.includes('artist')) {
@@ -36,4 +47,4 @@ const contractor = (req, res, next) => {
   next()  
 }
 
-module.exports = { authorize, owner, artist, contractor }
+module.exports = { authorize, owner, admin, artist, contractor }

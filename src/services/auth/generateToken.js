@@ -15,7 +15,7 @@ module.exports = class GenerateTokenService {
         return jwt.encode(payload, process.env.AUTH_SECRET)
     }
 
-    static async getUserPayload(user) {        
+    static async getUserPayload(user) {
         if (! user instanceof User) {
              throw new Error('Invalid user')
         }

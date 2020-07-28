@@ -9,12 +9,15 @@ const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true, select: false },
   role: { type: String, enum: ['artist', 'contractor', 'admin'] },
-  name: { type: String, required: true },  
+  name: { type: String, required: true },
   access_token: { type: String, required: true, select: false },
+  status: { type: String, enum: ['pending', 'active', 'blocked'], default: 'pending' },
   photo: { type: String },
   first_name: { type: String },
   last_name: { type: String },
   accept_terms: { type: Boolean },
+  // Keep while migration is not run
+  is_verified: { type: Boolean },
   verification: {
     token: { type: String, select: false },
     is_verified: { type: Boolean, default: false },
@@ -75,17 +78,20 @@ class User extends BaseModel {
 
   getRoleId() {
     console.log('Getting role id...')
-    if (this.role === 'artist') {
+    console.log(this)
+    if (this.role === 'artist' && this.artist !== undefined) {
       return this.artist.id
     }
 
-    if (this.role === 'contractor') {
+    if (this.role === 'contractor' && this.contractor !== undefined) {
       return this.contractor.id
     }
 
     return null
   }
 }
+
+userSchema.index({ email: 'text', name: 'text' })
 
 // https://mongoosejs.com/docs/api.html#schema_Schema-loadClass
 userSchema.loadClass(User)

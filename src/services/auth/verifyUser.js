@@ -6,9 +6,10 @@ const BadRequestException = require('../../exception/bad')
 const UnauthorizedException = require('../../exception/unauthorized')
 
 module.exports = class VerifyUserService extends AuthService {
-  constructor(token) {
+  constructor(token, bypassExpiration) {
     super()
     this.token = token
+    this.bypassExpiration = bypassExpiration
   }
 
   async verify() {
@@ -52,6 +53,7 @@ module.exports = class VerifyUserService extends AuthService {
   }
 
   isTokenExpired() {
+    if (this.bypassExpiration) { return this }
     const now = moment()
     const tokenIssueDt = moment(this.user.verification.issued_at)
     console.log('Verifying token expiration date...')

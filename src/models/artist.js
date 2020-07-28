@@ -66,6 +66,6 @@ class Artist extends BaseModel {
   }
 }
 
-artistSchema.index({ company_name: 'text', story: 'text', 'category.name': 'text', 'category.subcategory': 'text', tags: 'text' });
+artistSchema.index({ company_name: 'text', story: 'text', 'category.name': 'text', 'category.subcategory': 'text', tags: 'text' })
 artistSchema.loadClass(Artist)
 module.exports = db.model('Artist', artistSchema)
