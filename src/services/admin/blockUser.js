@@ -1,4 +1,4 @@
-const UserService = require('./userBase')
+const UserService = require('./user')
 
 module.exports = class BlockUserService extends UserService
 {

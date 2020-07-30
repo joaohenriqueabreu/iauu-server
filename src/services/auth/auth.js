@@ -38,7 +38,7 @@ module.exports = class AuthService extends BaseService {
     return this.user.access_token
   }
 
-  getPayload() {    
+  getPayload() {
     return this.payload
   }
 

@@ -1,4 +1,4 @@
-const UserService = require('./userBase')
+const UserService = require('./user')
 const BadRequestException = require('../../exception/bad')
 const VerifyUserService = require('../auth/verifyUser')
 

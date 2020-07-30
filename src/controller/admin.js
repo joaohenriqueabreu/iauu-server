@@ -1,17 +1,30 @@
 'use strict'
 
 const BaseController = require('./base')
-const StatsService = require('../services/admin/stats')
+const UserService = require('../services/admin/user')
+const UsersStatsService = require('../services/admin/usersStats')
+const PresentationsStatsService = require('../services/admin/presentationsStats')
 const SearchUsersService = require('../services/admin/searchUsers')
 const UserStatsService = require('../services/admin/userStats')
 const BlockUserService = require('../services/admin/blockUser')
 const ActivateUserService = require('../services/admin/activateUser')
+const VerifyUserService = require('../services/auth/verifyUser')
+const LoginAsUserService = require('../services/auth/loginAsUser')
 
 class AdminController extends BaseController {
-  getStats(req, res, next) {    
-    console.log("Requesting app stats...")
+  getUsersStats(req, res, next) {    
+    console.log("Requesting users stats...")
 
-    const statsService = new StatsService()
+    const statsService = new UsersStatsService()
+    statsService.retrieve()
+      .then(() => { res.status(200).json(statsService.getStats()) })
+      .catch((error) => next(error))
+  }
+
+  getPresentationsStats(req, res, next) {    
+    console.log("Requesting presentations stats...")
+
+    const statsService = new PresentationsStatsService()
     statsService.retrieve()
       .then(() => { res.status(200).json(statsService.getStats()) })
       .catch((error) => next(error))
@@ -50,6 +63,45 @@ class AdminController extends BaseController {
     const activateUserService = new ActivateUserService(req.data)
     activateUserService.activate()
       .then(() => { res.status(200).json(activateUserService.getUser()) })
+      .catch((error) => next(error))
+  }
+
+  async verifyUser(req, res, next) {
+    console.log("Verifying user...")
+
+    const userService = new UserService(req.data)
+    await userService.search()
+    const user = userService.getUser()
+
+    console.log('Found user to verify...')
+
+    const verifyUserService = new VerifyUserService(user.verification.token, true)
+    verifyUserService.verify()
+      .then(() => { res.status(200).json(verifyUserService.getUser()) })
+      .catch((error) => next(error))
+  }
+
+  async resendVerification(req, res, next) {
+    console.log("Verifying user...")
+
+    const userService = new UserService(req.data)
+    await userService.search()
+    const user = userService.getUser()
+
+    console.log('Found user to verify...')
+
+    const verifyUserService = new VerifyUserService(user.verification.token, true)
+    verifyUserService.resend()
+      .then(() => { res.status(200).json(verifyUserService.getUser()) })
+      .catch((error) => next(error))
+  }
+
+  loginAsUser(req, res, next) {
+    console.log('Logging in as user...')
+    const loginAsUserService = new LoginAsUserService(req.data)
+
+    loginAsUserService.login()
+      .then(() => res.status(200).json(loginAsUserService.getToken()))
       .catch((error) => next(error))
   }
 }

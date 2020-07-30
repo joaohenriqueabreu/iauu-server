@@ -71,6 +71,7 @@ module.exports = class VerifyUserService extends AuthService {
 
   setUserAsVerified() {
     this.user.verification.is_verified = true
+    this.user.status = 'active'
     return this
   }
 

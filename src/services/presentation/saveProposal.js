@@ -11,7 +11,6 @@ module.exports = class SaveProposalService extends PresentationService
       super(user, data)
 
       this.proposal = data.proposal
-      
     }
 
     async save() {
@@ -32,6 +31,7 @@ module.exports = class SaveProposalService extends PresentationService
     createPresentation() {
       this.presentation = new Presentation()
       this.presentation.status = 'proposal'
+      console.log(this.user)
       this.contractorId = this.user.role_id
       return this
     }

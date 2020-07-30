@@ -28,7 +28,8 @@ module.exports = class GenerateTokenService {
             email:  user.email,
             name:   user.name,
             photo:  user.photo,
-            role_id: user.getRoleId(),
+            role_id: await user.getRoleId(),
+            admin_token: user.admin_token,
             requires_initial_setup: this.needsSetup(user),
             iat:    now,            
             exp:    now + tokenExpiration 

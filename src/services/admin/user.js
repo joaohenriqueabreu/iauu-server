@@ -9,6 +9,12 @@ module.exports = class UserService extends BaseService
       this.user = {}
     }
 
+    async search() {
+      await this.searchUser()
+      await this.ensureUserWasFound()
+      return this
+    }
+
     async searchUser() {
       this.user = await User.findById(this.id)
         .select('+access_token +verification.token')
@@ -28,7 +34,7 @@ module.exports = class UserService extends BaseService
 
     async saveUser() {
       console.log('Trying to save user...')    
-      if (this.user.isModified) {      
+      if (this.user.isModified) {
         await this.user.save()
         console.log('User updated...')
       }

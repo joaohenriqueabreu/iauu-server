@@ -46,6 +46,15 @@ const credentials = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const adminCredentials = (req, res, next) => {
+  const schema = validateRequest.object({
+    token: validateRequest.string().required(),
+    id: validateRequest.string().required(),
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
 const verify = (req, res, next) => {
   console.log('Validating verify request...')
   const schema = validateRequest.object({
@@ -96,11 +105,6 @@ const social = (req, res, next) => {
 
   return validate(req.body, req, next, schema)
 }
-
-// const oauth = (req, res, next) => {
-//   req.data = { token: req.headers.authorization.replace('Bearer ', '')}
-//   next()
-// }
 
 const id = (req, res, next) => {
   const schema = validateRequest.object({
@@ -192,6 +196,7 @@ module.exports = {
   social,
   newCrendentials, 
   credentials, 
+  adminCredentials,
   verify, 
   forgotPassword, 
   resetPassword, 

@@ -16,15 +16,19 @@ const userSchema = new Schema({
   first_name: { type: String },
   last_name: { type: String },
   accept_terms: { type: Boolean },
-  // Keep while migration is not run
-  is_verified: { type: Boolean },
   verification: {
     token: { type: String, select: false },
     is_verified: { type: Boolean, default: false },
-    issued_at: { type: Date, default: Date.now }
+    issued_at: { type: Date, default: Date.now },
+    verified_at: { type: Date }
   },
   reset_token: { type: String, select: false },
   reset_token_expiry: { type: Date },
+  admin_token: { type: String }, // Grants access to login as users
+  referral: {
+    token: { type: String },
+    referred_by: { type: db.Schema.Types.ObjectId, ref: 'User' }
+  },
   facebook_id: { type: String},
   google_id: { type: String },
   artist: {
