@@ -14,4 +14,6 @@ api.put('/users/:id/verify', authorizationMiddleware.authorize, authorizationMid
 api.post('/users/:id/verify/resend', authorizationMiddleware.authorize, authorizationMiddleware.admin, validationMiddleware.id, adminController.resendVerification)
 api.delete('/users/:id', authorizationMiddleware.authorize, authorizationMiddleware.admin, validationMiddleware.id, adminController.blockUser)
 
+api.get('/presentations', authorizationMiddleware.authorize, authorizationMiddleware.admin, validationMiddleware.query, adminController.getPresentations)
+
 module.exports = api

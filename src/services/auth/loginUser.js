@@ -14,6 +14,7 @@ module.exports = class AuthenticateUserService extends AuthService
       await this.lookupUser({ email: this.email })
       await this.validateLogin()
       await this.generateAccessToken()
+      await this.renewLastLogin()
       await this.saveUser()
       return this
     }
@@ -32,6 +33,12 @@ module.exports = class AuthenticateUserService extends AuthService
         throw new UnauthorizedException('User not verified')
       }
 
+      return this
+    }
+
+    renewLastLogin() {
+      console.log('Updating last login...')
+      this.user.last_logged_in = Date.now()
       return this
     }
 }

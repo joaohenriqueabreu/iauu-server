@@ -11,6 +11,8 @@ const ActivateUserService = require('../services/admin/activateUser')
 const VerifyUserService = require('../services/auth/verifyUser')
 const LoginAsUserService = require('../services/auth/loginAsUser')
 
+const SearchPresentationsService = require('../services/admin/searchPresentations')
+
 class AdminController extends BaseController {
   getUsersStats(req, res, next) {    
     console.log("Requesting users stats...")
@@ -102,6 +104,15 @@ class AdminController extends BaseController {
 
     loginAsUserService.login()
       .then(() => res.status(200).json(loginAsUserService.getToken()))
+      .catch((error) => next(error))
+  }
+
+  getPresentations(req, res, next) {  
+    console.log("Requesting app presentations...")
+
+    const searchPresentationsService = new SearchPresentationsService(req.data)
+    searchPresentationsService.search()
+      .then(() => { res.status(200).json(searchPresentationsService.getPresentations()) })
       .catch((error) => next(error))
   }
 }

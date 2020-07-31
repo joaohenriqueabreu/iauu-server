@@ -39,8 +39,7 @@ const userSchema = new Schema({
     type: db.Schema.Types.ObjectId,
     ref: 'Contractor'
   },
-  date_created: { type: Date, default: Date.now },
-  date_updated: { type: Date },
+  last_logged_in: { type: Date },
 }, { ...baseSchemaOptions })
 
 class User extends BaseModel {
