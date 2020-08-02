@@ -20,7 +20,7 @@ module.exports = class GenerateTokenService {
              throw new Error('Invalid user')
         }
 
-        const now = Math.floor(Date.now() / 1000)                
+        const now = Math.floor(Date.now() / 1000)
         const payload = {
             id:     user.id,
             // Role must be an arrah for frontend $auth handle access scope

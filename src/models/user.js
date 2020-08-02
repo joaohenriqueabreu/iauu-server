@@ -52,9 +52,9 @@ class User extends BaseModel {
   }
 
   static fetchdById(id) {
-    return this.findById(id)      
+    return this.findById(id)
       .populate('artist')
-      .populate('contractor')      
+      .populate('contractor')
   }
 
   static fetchWithSensitiveDataById(id) {

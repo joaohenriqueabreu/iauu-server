@@ -2,21 +2,21 @@ const AuthService = require('./auth')
 const { Artist, Contractor } = require('../../models')
 
 module.exports = class AssignRoleService extends AuthService {
-  constructor(payload, role) {
+  constructor(data, role) {
     super()
     
-    this.userPayload = payload
+    this.id = data.id
     this.role = role
     this.roleInstance = {}
   }
 
   async assign() {
-    await this.lookupUserById(this.userPayload.id)
+    await this.searchUserById(this.id)
     await this.createRole()
     await this.saveRole()
-    await this.assignUserRole()
+    this.assignUserRole()
+    await this.saveUser()
     await this.generateAccessToken()
-    await this.saveUser()    
     return this
   }
 
@@ -24,35 +24,35 @@ module.exports = class AssignRoleService extends AuthService {
     this.user.role = this.role
 
     if (this.role === 'artist') {
-      await this.createArtist()
+      this.createArtist()
       return this
     }
 
     if (this.role === 'contractor') {
-      await this.createContractor()
+      this.createContractor()
       return this
     }    
 
     throw new Error('Invalid role provided...')
   }
 
-  async createArtist() {
-    this.roleInstance = new Artist()    
+  createArtist() {
+    this.roleInstance = new Artist()
     return this
   }
 
-  async createContractor() {
+  createContractor() {
     this.roleInstance = new Contractor()
     return this
   }
 
-  async saveRole() {    
+  async saveRole() {
     this.roleInstance.user = this.user.id
     await this.roleInstance.save()
     return this
   }
 
-  assignUserRole() {    
+  assignUserRole() {
     if (this.role === 'artist') {
       console.log('Assigning user as artist...')
       this.user.artist = this.roleInstance.id

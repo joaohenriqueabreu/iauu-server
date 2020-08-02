@@ -63,8 +63,16 @@ module.exports = class AuthService extends BaseService {
   }
 
   async lookupUser(conditions) {
-    // this.user = await User.fetchWithSensitiveData(conditions)
     this.user = await User.fetchWithSensitiveData(conditions)
+    return this
+  }
+
+  async searchUserById(id) {
+    this.user = await User.findById(id)
+      .select('+password +access_token +verification')
+      .populate('artist')
+      .populate('contractor')
+    
     return this
   }
 
