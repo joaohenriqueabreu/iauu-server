@@ -30,7 +30,7 @@
         "lodash": "^4.17.15",
         "memcached": "^2.2.2",
         "migrate-mongoose": "^4.0.0",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "mongodb": "^3.5.8",
         "mongoose": "^5.9.18",
         "mongoose-extend-schema": "^1.0.0",
